@@ -16,11 +16,14 @@ Route::group([
     ),
     'namespace' => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
+    Route::get('dashboard', 'DashboardController@dashboard')->name('backpack.dashboard');
     Route::crud('article', 'ArticleCrudController');
     Route::crud('category', 'CategoryCrudController');
     Route::crud('tag', 'TagCrudController');
     Route::crud('comment', 'CommentCrudController');
     Route::crud('user', 'UserCrudController');
+    Route::get('api-docs', 'ApiDocsController@index')->name('admin.api_docs');
+    Route::get('api-docs/download-postman', 'ApiDocsController@downloadPostman')->name('admin.api_docs.postman');
 });
 
 // Custom Auth override
