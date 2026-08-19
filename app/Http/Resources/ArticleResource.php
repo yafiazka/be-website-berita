@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ArticleResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'excerpt' => $this->excerpt,
+            'content' => $this->content,
+            'thumbnail' => $this->thumbnail,
+            'status' => $this->status,
+            'is_breaking' => (bool)$this->is_breaking,
+            'published_at' => $this->published_at?->toIso8601String(),
+            'meta_title' => $this->meta_title ?? $this->title,
+            'meta_description' => $this->meta_description ?? $this->excerpt,
+            'og_image' => $this->og_image ?? $this->thumbnail,
+            'views_count' => (int)$this->views_count,
+            'likes_count' => $this->likes()->count(),
+            'category' => new CategoryResource($this->whenLoaded('category')),
+            'author' => [
+                'id' => $this->author?->id,
+                'name' => $this->author?->name,
+                'avatar' => $this->author?->avatar,
+            ],
+            'tags' => TagResource::collection($this->whenLoaded('tags')),
+            'comments' => CommentResource::collection($this->whenLoaded('approvedComments')),
+            'created_at' => $this->created_at?->toIso8601String(),
+            'updated_at' => $this->updated_at?->toIso8601String(),
+        ];
+    }
+}
