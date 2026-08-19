@@ -3,11 +3,19 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\FeedController;
 
+// Root URL langsung mengarah ke Dashboard CMS Admin
 Route::get('/', function () {
+    return redirect(backpack_url('dashboard'));
+});
+
+// Route /api mengembalikan informasi indeks REST API
+Route::get('/api', function () {
     return response()->json([
-        'name' => config('app.name', 'Website Berita API'),
-        'version' => '1.0.0',
-        'api_doc' => url('/api/v1/health'),
+        'status' => 'online',
+        'api_version' => 'v1',
+        'base_url' => url('/api/v1'),
+        'documentation' => url('/admin/api-docs'),
+        'health' => url('/api/v1/health'),
     ]);
 });
 

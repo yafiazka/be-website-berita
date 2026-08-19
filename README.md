@@ -1,60 +1,91 @@
-# 📰 Backend Website Berita (REST API & CMS Dashboard)
+# Backend Website Berita (REST API & CMS Dashboard)
 
-Backend portal berita modern berbasis **Laravel 12**, **Backpack CMS v6 (Tabler Theme)**, dan **Podman/Docker**, dirancang dengan arsitektur RESTful API yang lengkap, aman, dan siap pakai untuk aplikasi frontend (Web/Mobile) serta tim redaksi media berita.
-
----
-
-## 🌟 Fitur Utama
-
-- 🔐 **Autentikasi Fleksibel**: Mendukung login menggunakan **Email** maupun **Username** (Laravel Sanctum Bearer Token).
-- 👥 **Role & Permission Granular**: Manajemen hak akses berbasis `spatie/laravel-permission` dengan 4 peran utama:
-  - **Super Administrator**: Akses penuh sistem, kelola pengguna, permission, dan activity logs.
-  - **Editor**: Moderasi komentar, peninjauan artikel, penerbitan (*publish*), dan penjadwalan berita (*schedule*).
-  - **Penulis (Jurnalis)**: Membuat draf artikel, mengunggah media, dan mengajukan draf untuk ditinjau.
-  - **Pembaca**: Membaca artikel, memberi *like*, menyimpan *bookmark*, dan mengirim komentar.
-- 📝 **Alur Kerja Redaksi (Workflow)**: Status artikel bertahap (*Draft* ➔ *In Review* ➔ *Published* / *Scheduled* ➔ *Archived*).
-- 🏷️ **Hierarki Kategori & Tags**: Kategori bersarang (*parent-child*) dan sistem penandaan (*tagging*) dinamis.
-- 💬 **Interaksi & Moderasi Komentar**: Komentar bertingkat (*nested replies*) dengan sistem moderasi (*Pending*, *Approved*, *Spam*).
-- 📊 **Dashboard Analitik Interaktif**: Dilengkapi kalkulasi metrik *real-time* dan grafik tren (*ApexCharts*) aktivitas pembaca mingguan & distribusi kategori.
-- ⚡ **Dokumentasi REST API & Postman**: Halaman katalog API terintegrasi di dalam panel admin dilengkapi fitur unduh **Postman Collection (.json)** sekali klik.
-- 📡 **Feeds & SEO Ready**: Dukungan penuh RSS Feed 2.0 (`/rss`) dan XML Sitemap (`/sitemap.xml`).
+Repositori ini berisi implementasi backend untuk portal berita modern yang dibangun menggunakan framework Laravel 12 dan Backpack for Laravel v6 (Tabler Theme). Sistem ini menyediakan antarmuka administrasi konten redaksi serta RESTful API lengkap untuk dikonsumsi oleh aplikasi frontend (Web, Mobile, atau agregator berita).
 
 ---
 
-## 🛠️ Stack Teknologi
+## Gambaran Sistem
 
-| Komponen | Teknologi | Keterangan |
+Aplikasi ini memisahkan fungsionalitas menjadi dua bagian utama:
+
+1. **Panel Administrasi CMS**: Antarmuka berbasis web untuk tim redaksi yang mencakup penulisan berita, manajemen kategori dan tag, moderasi komentar pembaca, manajemen pengguna, serta visualisasi metrik performa artikel secara real-time.
+2. **RESTful API v1**: Endpoint JSON terstruktur untuk melayani publikasi berita, alur kerja editorial, autentikasi berbasis Sanctum, interaksi pembaca (komentar, bookmark, like), serta RSS dan sitemap generator.
+
+---
+
+## Fitur Utama
+
+### 1. Autentikasi dan Otorisasi
+- Autentikasi fleksibel mendukung input berupa **Email** ataupun **Username**.
+- Integrasi token berbasis Laravel Sanctum untuk akses endpoint API.
+- Manajemen hak akses terinci menggunakan `spatie/laravel-permission` yang terbagi ke dalam 4 peran pengguna:
+  - **Super Administrator**: Akses menyeluruh ke seluruh modul sistem, hak akses, dan log aktivitas.
+  - **Editor**: Meninjau draf, menyunting, mempublikasikan, menjadwalkan artikel, dan memoderasi komentar.
+  - **Penulis**: Membuat dan mengelola artikel milik sendiri serta mengajukannya ke meja redaksi.
+  - **Pembaca**: Mengakses konten publik, memberi suka (like), menyimpan bacaan (bookmark), dan mengirim komentar.
+
+### 2. Manajemen Konten dan Alur Redaksi
+- Workflow penerbitan bertahap: Draft, Peninjauan (In Review), Terbit (Published), Terjadwal (Scheduled), dan Arsip (Archived).
+- Hierarki kategori multi-level (kategori induk dan subkategori).
+- Pengelompokan berita menggunakan sistem tags dinamis.
+- Manajemen meta tag SEO per artikel (judul meta, deskripsi meta, slug kustom, gambar pratinjau).
+
+### 3. Interaksi dan Komentar
+- Komentar bertingkat (nested replies) dengan alur moderasi status (Pending, Approved, Spam).
+- Fitur like dan bookmark per artikel khusus pengguna terdaftar.
+- Fitur langganan buletin berita (newsletter) berbasis verifikasi email.
+
+### 4. Dashboard Analitik Redaksi
+- Ringkasan metrik total artikel, akumulasi tayangan pembaca, total interaksi, dan status moderasi komentar.
+- Visualisasi grafik area interaktif untuk tren pembaca dan penerbitan 7 hari terakhir.
+- Donut chart distribusi artikel per kategori berita.
+- Daftar artikel terpopuler (trending) dengan jumlah tayangan tertinggi.
+
+### 5. Dokumentasi API dan Ekspor Postman
+- Halaman katalog endpoint API terintegrasi di dalam panel admin.
+- Fitur unduh berkas Postman Collection v2.1 (.json) untuk pengujian endpoint secara langsung di aplikasi Postman.
+- Dukungan umpan RSS 2.0 (`/rss`) dan XML Sitemap (`/sitemap.xml`).
+
+---
+
+## Stack Teknologi
+
+| Komponen | Spesifikasi | Keterangan |
 |---|---|---|
-| **Framework** | PHP 8.3 / Laravel 12 | RESTful API & Backend Engine |
-| **Admin CMS Panel** | Backpack for Laravel 6.8 | Tema Tabler (*Vertical Sidebar Layout*) |
-| **Database** | MySQL 8.0 | Container `global-mysql:3306` (`be_website_berita`) |
-| **Cache & Queue** | Redis | Container `global-redis:6379` via ekstensi `phpredis` |
-| **Container Engine** | Podman / Podman Compose | Port mapping `8086:80` pada jaringan `global-db-net` |
-| **Visualisasi Data** | ApexCharts | Grafik tren pembaca dan distribusi kategori |
+| Backend Framework | PHP 8.3 / Laravel 12 | Engine inti aplikasi dan API |
+| Panel CMS | Backpack CRUD 6.8 (Theme Tabler) | Tata letak sidebar vertikal & top header |
+| Database | MySQL 8.0 | Container `global-mysql:3306` |
+| Cache & Session | Redis | Driver `phpredis` via `global-redis:6379` |
+| Container Platform | Podman / Docker | Port host `8086:80` |
+| Visualisasi Data | ApexCharts | Grafik tren dan distribusi kategori |
 
 ---
 
-## 🚀 Panduan Instalasi & Menjalankan Proyek
+## Panduan Instalasi dan Menjalankan Proyek
 
-### 1. Prasyarat Sistem
-Pastikan Anda telah memasang:
-- [Podman](https://podman.io/) atau [Docker](https://www.docker.com/)
+### 1. Prasyarat
+Pastikan environment lokal telah terpasang:
+- Podman / Docker
 - Podman Compose / Docker Compose
 
-### 2. Clone Repository
+### 2. Kloning Repositori
 ```bash
 git clone https://github.com/yafiazka/be-website-berita.git
 cd be-website-berita
 ```
 
-### 3. Konfigurasi Environment (`.env`)
-Salin berkas contoh environment dan sesuaikan kredensial database/Redis Anda:
+### 3. Konfigurasi Environment
+Salin berkas template environment:
 ```bash
 cp .env.example .env
 ```
-Pastikan pengaturan koneksi database mengarah ke service database Anda:
+
+Pastikan variabel koneksi database dan Redis disesuaikan dengan container jaringan Anda:
 ```env
 APP_NAME="Portal Berita"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
 APP_URL=http://localhost:8086
 
 DB_CONNECTION=mysql
@@ -69,90 +100,88 @@ REDIS_HOST=global-redis
 REDIS_PORT=6379
 ```
 
-### 4. Build & Jalankan Container
-Jalankan container menggunakan Podman Compose:
+### 4. Menjalankan Container
+Jalankan container menggunakan compose:
 ```bash
 podman compose up -d --build
 ```
-Aplikasi akan aktif dan dapat diakses melalui port host **`http://localhost:8086`**.
+Aplikasi akan dapat diakses pada alamat `http://localhost:8086`.
 
-### 5. Jalankan Migrasi & Database Seeder
-Eksekusi migrasi tabel dan data awal di dalam container:
+### 5. Menjalankan Migrasi dan Seeder
+Eksekusi migrasi database dan pengisian data dummy awal:
 ```bash
 podman exec -i berita-app php artisan migrate:fresh --seed
 ```
 
 ---
 
-## 🔑 Kredensial Login Default
-
-Gunakan kredensial berikut untuk login ke **Dashboard Admin** (`http://localhost:8086/admin/login`) atau melalui endpoint API:
+## Akun Pengujian Default
 
 | Peran (Role) | Username | Email | Password |
 |---|---|---|---|
-| **Super Admin** | `admin` | `admin@berita.local` | `password` |
-| **Senior Editor** | `editor` | `editor@berita.local` | `password` |
-| **Penulis** | `penulis` | `penulis@berita.local` | `password` |
-| **Pembaca** | `pembaca` | `pembaca@berita.local` | `password` |
-
-> 💡 *Catatan: Form login menerima input berupa **Email** ataupun **Username**.*
+| Super Administrator | admin | admin@berita.local | password |
+| Senior Editor | editor | editor@berita.local | password |
+| Penulis | penulis | penulis@berita.local | password |
+| Pembaca | pembaca | pembaca@berita.local | password |
 
 ---
 
-## 🧭 Navigasi Panel Admin & REST API
+## Struktur Routing Utama
 
-- **Dashboard CMS Redaksi**: `http://localhost:8086/admin`
-- **Form Login Admin**: `http://localhost:8086/admin/login`
-- **Katalog & Dokumentasi API**: `http://localhost:8086/admin/api-docs`
-- **Unduh Postman Collection (.json)**: `http://localhost:8086/admin/api-docs/download-postman`
-- **System Health Check**: `http://localhost:8086/api/v1/health`
-- **RSS Feed Berita**: `http://localhost:8086/rss`
-- **XML Sitemap**: `http://localhost:8086/sitemap.xml`
+- **`/`**: Halaman utama langsung mengarah ke Dashboard CMS Admin.
+- **`/api`**: Informasi indeks REST API v1.
+- **`/admin/login`**: Formulir login admin panel (mendukung email atau username).
+- **`/admin/dashboard`**: Dashboard analitik dan statistik redaksi.
+- **`/admin/api-docs`**: Dokumentasi interaktif seluruh endpoint REST API.
+- **`/admin/api-docs/download-postman`**: Pengunduhan berkas Postman Collection JSON.
+- **`/sitemap.xml`**: Peta situs artikel berita format XML standar search engine.
+- **`/rss`**: Umpan berita RSS Feed 2.0.
 
 ---
 
-## 📚 Ringkasan Endpoint REST API v1
+## Ringkasan Endpoint REST API v1
 
-Seluruh respons API menggunakan format JSON standar:
+Format respons API standar:
 ```json
 {
   "success": true,
-  "message": "Pesan status",
+  "message": "Pesan deskripsi proses",
   "data": { ... }
 }
 ```
 
-### 1. Autentikasi (`/api/v1/auth/*`)
-- `POST /api/v1/auth/login` — Login via email atau username, mengembalikan Bearer Token.
-- `POST /api/v1/auth/register` — Pendaftaran akun pembaca baru.
-- `GET /api/v1/auth/me` — Profil user saat ini beserta roles & permissions (Auth).
-- `POST /api/v1/auth/logout` — Mencabut token login aktif (Auth).
+### Autentikasi (`/api/v1/auth/*`)
+- `POST /api/v1/auth/login`: Login pengguna dengan email atau username, menghasilkan Bearer Token.
+- `POST /api/v1/auth/register`: Pendaftaran akun pembaca baru.
+- `GET /api/v1/auth/me`: Mengambil data profil pengguna yang sedang terotentikasi.
+- `POST /api/v1/auth/logout`: Mencabut token autentikasi aktif.
 
-### 2. Artikel Publik (`/api/v1/articles/*`)
-- `GET /api/v1/articles` — Daftar artikel terbit (filter kategori, tag, sortir, paginasi).
-- `GET /api/v1/articles/trending` — Top 5 berita dengan pembaca terbanyak.
-- `GET /api/v1/articles/breaking` — Berita utama mendesak (*breaking news*).
-- `GET /api/v1/articles/search?q={keyword}` — Pencarian artikel (*full-text*).
-- `GET /api/v1/articles/{slug}` — Detail lengkap artikel (otomatis menghitung views).
-- `POST /api/v1/articles/{slug}/like` — Beri / batalkan Like (Auth).
-- `POST /api/v1/articles/{slug}/bookmark` — Simpan ke Bookmark pribadi (Auth).
+### Artikel Publik (`/api/v1/articles/*`)
+- `GET /api/v1/articles`: Mengambil daftar artikel terbit (filter kategori, tag, sorting, paginasi).
+- `GET /api/v1/articles/trending`: Mengambil 5 berita dengan pembaca terbanyak.
+- `GET /api/v1/articles/breaking`: Mengambil berita berstatus breaking news.
+- `GET /api/v1/articles/search?q={kata_kunci}`: Pencarian berita berdasarkan judul atau isi.
+- `GET /api/v1/articles/{slug}`: Mengambil detail satu artikel serta menaikkan counter views.
+- `POST /api/v1/articles/{slug}/like`: Memberikan atau membatalkan suka pada artikel (Auth).
+- `POST /api/v1/articles/{slug}/bookmark`: Menyimpan atau membatalkan bookmark artikel (Auth).
 
-### 3. Redaksi & Editorial (`/api/v1/editorial/*`)
-- `GET /api/v1/editorial/articles` — Manajemen seluruh status artikel redaksi.
-- `POST /api/v1/editorial/articles` — Buat artikel baru (Draft/Review).
-- `POST /api/v1/editorial/articles/{id}/publish` — Publikasikan artikel (Editor/Admin).
-- `POST /api/v1/editorial/articles/{id}/schedule` — Jadwalkan publikasi artikel.
-- `GET /api/v1/editorial/stats` — Agregasi statistik performa redaksi.
-
----
-
-## 🌳 Struktur Percabangan Git
-
-Repository ini menerapkan dua branch utama:
-- **`production`**: Branch rilis stabil yang siap untuk *deployment* server *production*.
-- **`development`**: Branch pengembangan aktif untuk integrasi fitur baru dan perbaikan *bug*.
+### Redaksi dan Editorial (`/api/v1/editorial/*`)
+- `GET /api/v1/editorial/articles`: Mengambil seluruh artikel redaksi (draft, review, published).
+- `POST /api/v1/editorial/articles`: Membuat draf artikel baru.
+- `POST /api/v1/editorial/articles/{id}/publish`: Mengubah status artikel menjadi terbit.
+- `POST /api/v1/editorial/articles/{id}/schedule`: Menjadwalkan tanggal rilis artikel.
+- `GET /api/v1/editorial/stats`: Mengambil statistik performa tim redaksi.
 
 ---
 
-## 📄 Lisensi
-Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+## Percabangan Git
+
+Pengembangan proyek ini dibagi menjadi dua cabang utama:
+- **`production`**: Cabang utama yang berisi kode teruji dan stabil untuk rilis production.
+- **`development`**: Cabang kerja aktif untuk penambahan fitur dan perbaikan berkala.
+
+---
+
+## Lisensi
+
+Proyek ini menggunakan lisensi [MIT](LICENSE).
