@@ -13,8 +13,18 @@ class RegisterController extends Controller
 {
     public function __invoke(RegisterRequest $request): JsonResponse
     {
+        $username = $request->username ?: explode('@', $request->email)[0];
+        // Ensure username uniqueness
+        $baseUsername = $username;
+        $count = 1;
+        while (User::where('username', $username)->exists()) {
+            $username = "{$baseUsername}{$count}";
+            $count++;
+        }
+
         $user = User::create([
             'name' => $request->name,
+            'username' => $username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'is_active' => true,
@@ -30,6 +40,7 @@ class RegisterController extends Controller
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
+                'username' => $user->username,
                 'email' => $user->email,
                 'avatar' => $user->avatar,
                 'roles' => $user->getRoleNames(),

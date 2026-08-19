@@ -13,10 +13,18 @@ class LoginController extends Controller
 {
     public function __invoke(LoginRequest $request): JsonResponse
     {
-        $user = User::where('email', $request->email)->first();
+        $loginInput = $request->input('login') ?? $request->input('email') ?? $request->input('username');
+
+        if (!$loginInput) {
+            return ApiResponse::error('Email atau username wajib diisi.', 422);
+        }
+
+        $user = User::where('email', $loginInput)
+            ->orWhere('username', $loginInput)
+            ->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return ApiResponse::error('Email atau kata sandi tidak cocok.', 401);
+            return ApiResponse::error('Email/username atau kata sandi tidak cocok.', 401);
         }
 
         if (!$user->is_active) {
@@ -31,6 +39,7 @@ class LoginController extends Controller
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
+                'username' => $user->username,
                 'email' => $user->email,
                 'avatar' => $user->avatar,
                 'roles' => $user->getRoleNames(),

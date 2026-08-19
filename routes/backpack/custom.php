@@ -21,4 +21,13 @@ Route::group([
     Route::crud('tag', 'TagCrudController');
     Route::crud('comment', 'CommentCrudController');
     Route::crud('user', 'UserCrudController');
-}); // this should be the absolute last line of this file
+});
+
+// Custom Auth override
+Route::group([
+    'prefix' => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => (array) config('backpack.base.web_middleware', 'web'),
+    'namespace' => 'App\Http\Controllers\Admin\Auth',
+], function () {
+    Route::post('login', 'LoginController@login');
+});

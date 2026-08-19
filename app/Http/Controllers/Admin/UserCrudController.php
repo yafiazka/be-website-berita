@@ -24,6 +24,7 @@ class UserCrudController extends CrudController
     protected function setupListOperation(): void
     {
         CRUD::column('name')->label('Nama');
+        CRUD::column('username')->label('Username');
         CRUD::column('email')->label('Email');
         CRUD::column('roles')->type('select_multiple')->entity('roles')->attribute('name')->label('Roles');
         CRUD::column('is_active')->type('boolean')->label('Aktif');
@@ -34,11 +35,13 @@ class UserCrudController extends CrudController
     {
         CRUD::setValidation([
             'name' => 'required|max:255',
+            'username' => 'nullable|max:50|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
         ]);
 
         CRUD::field('name')->label('Nama Lengkap');
+        CRUD::field('username')->label('Username');
         CRUD::field('email')->type('email')->label('Email');
         CRUD::field('password')->type('password')->label('Kata Sandi');
         CRUD::field('roles')->type('select_multiple')->entity('roles')->attribute('name')->pivot(true)->label('Peran (Role)');
@@ -49,11 +52,13 @@ class UserCrudController extends CrudController
     {
         CRUD::setValidation([
             'name' => 'required|max:255',
+            'username' => 'nullable|max:50|unique:users,username,' . CRUD::getCurrentEntryId(),
             'email' => 'required|email|unique:users,email,' . CRUD::getCurrentEntryId(),
             'password' => 'nullable|min:8',
         ]);
 
         CRUD::field('name')->label('Nama Lengkap');
+        CRUD::field('username')->label('Username');
         CRUD::field('email')->type('email')->label('Email');
         CRUD::field('password')->type('password')->label('Kata Sandi (biarkan kosong jika tidak diubah)');
         CRUD::field('roles')->type('select_multiple')->entity('roles')->attribute('name')->pivot(true)->label('Peran (Role)');
