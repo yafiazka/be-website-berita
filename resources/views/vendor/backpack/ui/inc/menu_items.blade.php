@@ -1,11 +1,11 @@
-{{-- This file is used for menu items by any Backpack v6 theme --}}
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i class="la la-home nav-icon"></i> <span>{{ trans('backpack::base.dashboard') }}</span></a></li>
+{{-- Backpack v6 Tabler Menu Items --}}
+<x-backpack::menu-item title="Dashboard" icon="la la-home" :link="backpack_url('dashboard')" />
 
-<li class="nav-separator">MANAJEMEN BERITA</li>
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('article') }}"><i class="la la-newspaper nav-icon"></i> <span>Artikel Berita</span></a></li>
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('category') }}"><i class="la la-list nav-icon"></i> <span>Kategori</span></a></li>
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('tag') }}"><i class="la la-tag nav-icon"></i> <span>Tags</span></a></li>
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('comment') }}"><i class="la la-comments nav-icon"></i> <span>Komentar</span></a></li>
+<x-backpack::menu-separator title="MANAJEMEN KONTEN" />
+<x-backpack::menu-item title="Artikel Berita" icon="la la-newspaper" :link="backpack_url('article')" />
+<x-backpack::menu-item title="Kategori" icon="la la-folder-open" :link="backpack_url('category')" />
+<x-backpack::menu-item title="Tags" icon="la la-tags" :link="backpack_url('tag')" />
+<x-backpack::menu-item title="Komentar" icon="la la-comments" :link="backpack_url('comment')" />
 
-<li class="nav-separator">PENGATURAN & USER</li>
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('user') }}"><i class="la la-users nav-icon"></i> <span>Pengguna (Users)</span></a></li>
+<x-backpack::menu-separator title="PENGATURAN & USER" />
+<x-backpack::menu-item title="Pengguna (Users)" icon="la la-user-cog" :link="backpack_url('user')" />
