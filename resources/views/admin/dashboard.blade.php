@@ -63,7 +63,7 @@
                     </div>
                     <div class="h1 mb-2 mt-2 fw-bold text-success">{{ number_format($totalViews) }}</div>
                     <div class="text-secondary small">
-                        <i class="la la-arrow-up text-success"></i> Akumulasi seluruh pembaca berita
+                        <i class="la la-chart-line text-success"></i> Akumulasi seluruh pembaca aktif
                     </div>
                 </div>
             </div>
@@ -119,10 +119,10 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-transparent py-3 d-flex align-items-center justify-content-between">
                     <div>
-                        <h3 class="card-title fw-bold m-0">Tren Pembaca & Publikasi Berita (7 Hari Terakhir)</h3>
-                        <div class="text-secondary small">Aktivitas tayangan pembaca harian</div>
+                        <h3 class="card-title fw-bold m-0">Tren Pembaca & Aktivitas Harian</h3>
+                        <div class="text-secondary small">Statistik penayangan 7 hari terakhir</div>
                     </div>
-                    <span class="badge bg-primary-subtle text-primary">Real-time</span>
+                    <span class="badge bg-primary-subtle text-primary">Aktivitas Mingguan</span>
                 </div>
                 <div class="card-body">
                     <div id="chart-views-trend" style="min-height: 280px;"></div>
@@ -137,12 +137,15 @@
                     <h3 class="card-title fw-bold m-0">Distribusi Kategori Berita</h3>
                 </div>
                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                    <div id="chart-categories-donut" style="min-height: 230px; width: 100%;"></div>
-                    <div class="d-flex flex-wrap justify-content-center gap-2 mt-3 small">
+                    <div id="chart-categories-donut" style="min-height: 210px; width: 100%;"></div>
+                    <div class="row g-2 w-100 mt-2">
                         @foreach($categoryDistribution as $cat)
-                            <span class="badge bg-secondary-subtle text-secondary">
-                                {{ $cat->name }}: {{ $cat->articles_count }}
-                            </span>
+                            <div class="col-6">
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded bg-dark-subtle small">
+                                    <span class="text-truncate me-1">{{ $cat->name }}</span>
+                                    <span class="fw-bold">{{ $cat->articles_count }}</span>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -156,7 +159,7 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-transparent py-3">
-                    <h3 class="card-title fw-bold m-0">Status Workflow Artikel</h3>
+                    <h3 class="card-title fw-bold m-0">Status Workflow Redaksi</h3>
                 </div>
                 <div class="card-body">
                     @php
@@ -197,11 +200,11 @@
 
                     <div>
                         <div class="d-flex justify-content-between mb-1 small">
-                            <span class="text-purple fw-semibold"><i class="la la-calendar-check"></i> Scheduled (Terjadwal)</span>
+                            <span class="text-secondary fw-semibold"><i class="la la-calendar-check"></i> Scheduled (Terjadwal)</span>
                             <span class="fw-bold">{{ $scheduledArticles }} ({{ $schPct }}%)</span>
                         </div>
                         <div class="progress progress-sm">
-                            <div class="progress-bar bg-purple" style="width: {{ $schPct }}%"></div>
+                            <div class="progress-bar bg-secondary" style="width: {{ $schPct }}%"></div>
                         </div>
                     </div>
                 </div>
@@ -212,17 +215,17 @@
         <div class="col-md-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-transparent py-3 d-flex align-items-center justify-content-between">
-                    <h3 class="card-title fw-bold m-0"><i class="la la-fire text-danger me-1"></i> Artikel Paling Populer (Trending)</h3>
+                    <h3 class="card-title fw-bold m-0"><i class="la la-fire text-danger me-1"></i> Artikel Terpopuler</h3>
                     <a href="{{ backpack_url('article') }}" class="btn btn-sm btn-ghost-primary">Lihat Semua</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-vcenter card-table table-hover">
                         <thead>
                             <tr>
-                                <th>Judul Artikel</th>
+                                <th>Judul Berita</th>
                                 <th>Kategori</th>
                                 <th>Penulis</th>
-                                <th class="text-end">Tayangan (Views)</th>
+                                <th class="text-end">Tayangan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -257,7 +260,6 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Data from Controller
         const last7DaysData = @json($last7Days);
         const categoryData = @json($categoryDistribution);
 
@@ -265,50 +267,70 @@
         const views = last7DaysData.map(item => item.views);
         const articles = last7DaysData.map(item => item.articles);
 
-        // 1. Views Trend Area Chart
+        // 1. Views Trend Smooth Area Chart
         const viewsOptions = {
             chart: {
                 type: 'area',
                 height: 280,
                 toolbar: { show: false },
                 fontFamily: 'inherit',
-                animations: { enabled: true }
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800
+                }
             },
             series: [{
                 name: 'Tayangan Pembaca',
                 data: views
             }, {
-                name: 'Artikel Dibuat',
+                name: 'Artikel Terbit',
                 data: articles
             }],
             xaxis: {
                 categories: dates,
-                labels: { style: { colors: '#6c757d' } }
+                labels: {
+                    style: { colors: '#6c757d', fontSize: '12px' }
+                },
+                axisBorder: { show: false },
+                axisTicks: { show: false }
             },
-            yaxis: {
-                labels: { style: { colors: '#6c757d' } }
-            },
+            yaxis: [{
+                title: { text: 'Views', style: { color: '#6c757d', fontSize: '11px' } },
+                labels: {
+                    style: { colors: '#6c757d' },
+                    formatter: val => val >= 1000 ? (val/1000).toFixed(1) + 'k' : val
+                }
+            }],
             colors: ['#206bc4', '#4299e1'],
             stroke: {
                 curve: 'smooth',
-                width: [3, 2]
+                width: [2.5, 2]
             },
             fill: {
                 type: 'gradient',
                 gradient: {
                     shadeIntensity: 1,
-                    opacityFrom: 0.45,
+                    opacityFrom: 0.35,
                     opacityTo: 0.05,
-                    stops: [0, 90, 100]
+                    stops: [0, 95]
                 }
+            },
+            grid: {
+                strokeDashArray: 4,
+                borderColor: 'rgba(255, 255, 255, 0.08)'
             },
             dataLabels: { enabled: false },
             tooltip: {
-                theme: 'dark'
+                theme: 'dark',
+                y: {
+                    formatter: val => val.toLocaleString() + ' kali'
+                }
             },
             legend: {
                 position: 'top',
-                horizontalAlign: 'right'
+                horizontalAlign: 'right',
+                labels: { colors: '#6c757d' }
             }
         };
         new ApexCharts(document.querySelector("#chart-views-trend"), viewsOptions).render();
@@ -320,15 +342,35 @@
         const donutOptions = {
             chart: {
                 type: 'donut',
-                height: 230,
+                height: 210,
                 fontFamily: 'inherit'
             },
             series: catCounts.length > 0 ? catCounts : [1],
-            labels: catLabels.length > 0 ? catLabels : ['Belum Ada Kategori'],
+            labels: catLabels.length > 0 ? catLabels : ['Belum Ada Data'],
             colors: ['#206bc4', '#2fb344', '#f76707', '#d63939', '#4299e1', '#ae3ec9'],
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '72%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total Berita',
+                                formatter: () => catCounts.reduce((a, b) => a + b, 0)
+                            }
+                        }
+                    }
+                }
+            },
             legend: { show: false },
-            dataLabels: { enabled: true },
-            tooltip: { theme: 'dark' }
+            dataLabels: { enabled: false },
+            tooltip: {
+                theme: 'dark',
+                y: {
+                    formatter: val => val + ' artikel'
+                }
+            }
         };
         new ApexCharts(document.querySelector("#chart-categories-donut"), donutOptions).render();
     });

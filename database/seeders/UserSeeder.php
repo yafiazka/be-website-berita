@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
                 'username' => 'admin',
                 'password' => Hash::make('password'),
                 'is_active' => true,
-                'avatar' => 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
+                'avatar' => null,
             ]
         );
         $admin->syncRoles(['Admin']);
@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
                 'username' => 'editor',
                 'password' => Hash::make('password'),
                 'is_active' => true,
-                'avatar' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
+                'avatar' => null,
             ]
         );
         $editor->syncRoles(['Editor']);
@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
                 'username' => 'penulis',
                 'password' => Hash::make('password'),
                 'is_active' => true,
-                'avatar' => 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+                'avatar' => null,
             ]
         );
         $penulis->syncRoles(['Penulis']);
@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
                 'username' => 'pembaca',
                 'password' => Hash::make('password'),
                 'is_active' => true,
-                'avatar' => 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150',
+                'avatar' => null,
             ]
         );
         $pembaca->syncRoles(['Pembaca']);

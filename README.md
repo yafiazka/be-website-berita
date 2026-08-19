@@ -1,58 +1,158 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📰 Backend Website Berita (REST API & CMS Dashboard)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Backend portal berita modern berbasis **Laravel 12**, **Backpack CMS v6 (Tabler Theme)**, dan **Podman/Docker**, dirancang dengan arsitektur RESTful API yang lengkap, aman, dan siap pakai untuk aplikasi frontend (Web/Mobile) serta tim redaksi media berita.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🌟 Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- 🔐 **Autentikasi Fleksibel**: Mendukung login menggunakan **Email** maupun **Username** (Laravel Sanctum Bearer Token).
+- 👥 **Role & Permission Granular**: Manajemen hak akses berbasis `spatie/laravel-permission` dengan 4 peran utama:
+  - **Super Administrator**: Akses penuh sistem, kelola pengguna, permission, dan activity logs.
+  - **Editor**: Moderasi komentar, peninjauan artikel, penerbitan (*publish*), dan penjadwalan berita (*schedule*).
+  - **Penulis (Jurnalis)**: Membuat draf artikel, mengunggah media, dan mengajukan draf untuk ditinjau.
+  - **Pembaca**: Membaca artikel, memberi *like*, menyimpan *bookmark*, dan mengirim komentar.
+- 📝 **Alur Kerja Redaksi (Workflow)**: Status artikel bertahap (*Draft* ➔ *In Review* ➔ *Published* / *Scheduled* ➔ *Archived*).
+- 🏷️ **Hierarki Kategori & Tags**: Kategori bersarang (*parent-child*) dan sistem penandaan (*tagging*) dinamis.
+- 💬 **Interaksi & Moderasi Komentar**: Komentar bertingkat (*nested replies*) dengan sistem moderasi (*Pending*, *Approved*, *Spam*).
+- 📊 **Dashboard Analitik Interaktif**: Dilengkapi kalkulasi metrik *real-time* dan grafik tren (*ApexCharts*) aktivitas pembaca mingguan & distribusi kategori.
+- ⚡ **Dokumentasi REST API & Postman**: Halaman katalog API terintegrasi di dalam panel admin dilengkapi fitur unduh **Postman Collection (.json)** sekali klik.
+- 📡 **Feeds & SEO Ready**: Dukungan penuh RSS Feed 2.0 (`/rss`) dan XML Sitemap (`/sitemap.xml`).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🛠️ Stack Teknologi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Komponen | Teknologi | Keterangan |
+|---|---|---|
+| **Framework** | PHP 8.3 / Laravel 12 | RESTful API & Backend Engine |
+| **Admin CMS Panel** | Backpack for Laravel 6.8 | Tema Tabler (*Vertical Sidebar Layout*) |
+| **Database** | MySQL 8.0 | Container `global-mysql:3306` (`be_website_berita`) |
+| **Cache & Queue** | Redis | Container `global-redis:6379` via ekstensi `phpredis` |
+| **Container Engine** | Podman / Podman Compose | Port mapping `8086:80` pada jaringan `global-db-net` |
+| **Visualisasi Data** | ApexCharts | Grafik tren pembaca dan distribusi kategori |
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 🚀 Panduan Instalasi & Menjalankan Proyek
 
-## Agentic Development
+### 1. Prasyarat Sistem
+Pastikan Anda telah memasang:
+- [Podman](https://podman.io/) atau [Docker](https://www.docker.com/)
+- Podman Compose / Docker Compose
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+### 2. Clone Repository
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/yafiazka/be-website-berita.git
+cd be-website-berita
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 3. Konfigurasi Environment (`.env`)
+Salin berkas contoh environment dan sesuaikan kredensial database/Redis Anda:
+```bash
+cp .env.example .env
+```
+Pastikan pengaturan koneksi database mengarah ke service database Anda:
+```env
+APP_NAME="Portal Berita"
+APP_URL=http://localhost:8086
 
-## Contributing
+DB_CONNECTION=mysql
+DB_HOST=global-mysql
+DB_PORT=3306
+DB_DATABASE=be_website_berita
+DB_USERNAME=root
+DB_PASSWORD=root
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+REDIS_CLIENT=phpredis
+REDIS_HOST=global-redis
+REDIS_PORT=6379
+```
 
-## Code of Conduct
+### 4. Build & Jalankan Container
+Jalankan container menggunakan Podman Compose:
+```bash
+podman compose up -d --build
+```
+Aplikasi akan aktif dan dapat diakses melalui port host **`http://localhost:8086`**.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 5. Jalankan Migrasi & Database Seeder
+Eksekusi migrasi tabel dan data awal di dalam container:
+```bash
+podman exec -i berita-app php artisan migrate:fresh --seed
+```
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🔑 Kredensial Login Default
 
-## License
+Gunakan kredensial berikut untuk login ke **Dashboard Admin** (`http://localhost:8086/admin/login`) atau melalui endpoint API:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Peran (Role) | Username | Email | Password |
+|---|---|---|---|
+| **Super Admin** | `admin` | `admin@berita.local` | `password` |
+| **Senior Editor** | `editor` | `editor@berita.local` | `password` |
+| **Penulis** | `penulis` | `penulis@berita.local` | `password` |
+| **Pembaca** | `pembaca` | `pembaca@berita.local` | `password` |
+
+> 💡 *Catatan: Form login menerima input berupa **Email** ataupun **Username**.*
+
+---
+
+## 🧭 Navigasi Panel Admin & REST API
+
+- **Dashboard CMS Redaksi**: `http://localhost:8086/admin`
+- **Form Login Admin**: `http://localhost:8086/admin/login`
+- **Katalog & Dokumentasi API**: `http://localhost:8086/admin/api-docs`
+- **Unduh Postman Collection (.json)**: `http://localhost:8086/admin/api-docs/download-postman`
+- **System Health Check**: `http://localhost:8086/api/v1/health`
+- **RSS Feed Berita**: `http://localhost:8086/rss`
+- **XML Sitemap**: `http://localhost:8086/sitemap.xml`
+
+---
+
+## 📚 Ringkasan Endpoint REST API v1
+
+Seluruh respons API menggunakan format JSON standar:
+```json
+{
+  "success": true,
+  "message": "Pesan status",
+  "data": { ... }
+}
+```
+
+### 1. Autentikasi (`/api/v1/auth/*`)
+- `POST /api/v1/auth/login` — Login via email atau username, mengembalikan Bearer Token.
+- `POST /api/v1/auth/register` — Pendaftaran akun pembaca baru.
+- `GET /api/v1/auth/me` — Profil user saat ini beserta roles & permissions (Auth).
+- `POST /api/v1/auth/logout` — Mencabut token login aktif (Auth).
+
+### 2. Artikel Publik (`/api/v1/articles/*`)
+- `GET /api/v1/articles` — Daftar artikel terbit (filter kategori, tag, sortir, paginasi).
+- `GET /api/v1/articles/trending` — Top 5 berita dengan pembaca terbanyak.
+- `GET /api/v1/articles/breaking` — Berita utama mendesak (*breaking news*).
+- `GET /api/v1/articles/search?q={keyword}` — Pencarian artikel (*full-text*).
+- `GET /api/v1/articles/{slug}` — Detail lengkap artikel (otomatis menghitung views).
+- `POST /api/v1/articles/{slug}/like` — Beri / batalkan Like (Auth).
+- `POST /api/v1/articles/{slug}/bookmark` — Simpan ke Bookmark pribadi (Auth).
+
+### 3. Redaksi & Editorial (`/api/v1/editorial/*`)
+- `GET /api/v1/editorial/articles` — Manajemen seluruh status artikel redaksi.
+- `POST /api/v1/editorial/articles` — Buat artikel baru (Draft/Review).
+- `POST /api/v1/editorial/articles/{id}/publish` — Publikasikan artikel (Editor/Admin).
+- `POST /api/v1/editorial/articles/{id}/schedule` — Jadwalkan publikasi artikel.
+- `GET /api/v1/editorial/stats` — Agregasi statistik performa redaksi.
+
+---
+
+## 🌳 Struktur Percabangan Git
+
+Repository ini menerapkan dua branch utama:
+- **`production`**: Branch rilis stabil yang siap untuk *deployment* server *production*.
+- **`development`**: Branch pengembangan aktif untuk integrasi fitur baru dan perbaikan *bug*.
+
+---
+
+## 📄 Lisensi
+Proyek ini dilisensikan di bawah [MIT License](LICENSE).
