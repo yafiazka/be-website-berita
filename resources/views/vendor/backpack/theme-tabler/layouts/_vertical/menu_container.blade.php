@@ -1,5 +1,5 @@
 @if (backpack_auth()->check())
-    <aside class="navbar navbar-vertical navbar-expand-lg navbar-dark border-end" style="min-height: 100vh; z-index: 1000;">
+    <aside class="navbar navbar-vertical navbar-expand-lg border-end bg-body" style="min-height: 100vh; z-index: 1000;">
         <div class="container-fluid d-flex flex-column h-100 p-0">
             <!-- Brand Logo Header -->
             <div class="navbar-brand-container d-flex align-items-center justify-content-between w-100 px-3 py-3 border-bottom">
@@ -8,7 +8,7 @@
                         <i class="la la-newspaper" style="font-size: 1.3rem;"></i>
                     </span>
                     <div>
-                        <div class="fs-3 fw-bold text-reset line-height-1">Portal Berita</div>
+                        <div class="fs-3 fw-bold text-body line-height-1">Portal Berita</div>
                         <div class="text-secondary" style="font-size: 0.72rem; letter-spacing: 0.5px;">ADMIN PANEL</div>
                     </div>
                 </a>
@@ -25,7 +25,7 @@
             </div>
 
             <!-- Sidebar Footer Status -->
-            <div class="navbar-footer w-100 p-3 border-top mt-auto bg-dark-subtle d-flex align-items-center justify-content-between">
+            <div class="navbar-footer w-100 p-3 border-top mt-auto bg-body-tertiary d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center small text-secondary">
                     <span class="status-dot status-dot-animated bg-success me-2"></span>
                     <span>API v1 • Online</span>

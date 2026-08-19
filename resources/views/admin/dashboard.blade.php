@@ -33,7 +33,7 @@
     <div class="row row-deck row-cards mb-4">
         <!-- Total Articles -->
         <div class="col-sm-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
+            <div class="card border shadow-sm">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="subheader text-uppercase text-secondary fw-semibold">Total Artikel</div>
@@ -41,7 +41,7 @@
                             <i class="la la-newspaper fs-3"></i>
                         </span>
                     </div>
-                    <div class="h1 mb-2 mt-2 fw-bold">{{ number_format($totalArticles) }}</div>
+                    <div class="h1 mb-2 mt-2 fw-bold text-body">{{ number_format($totalArticles) }}</div>
                     <div class="d-flex align-items-center gap-2 text-secondary small">
                         <span class="badge bg-success-subtle text-success">{{ $publishedArticles }} Terbit</span>
                         <span class="badge bg-warning-subtle text-warning">{{ $draftArticles }} Draft</span>
@@ -53,7 +53,7 @@
 
         <!-- Total Views -->
         <div class="col-sm-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
+            <div class="card border shadow-sm">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="subheader text-uppercase text-secondary fw-semibold">Total Pembaca (Views)</div>
@@ -71,7 +71,7 @@
 
         <!-- Total Interaksi (Likes, Bookmarks, Comments) -->
         <div class="col-sm-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
+            <div class="card border shadow-sm">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="subheader text-uppercase text-secondary fw-semibold">Interaksi Pembaca</div>
@@ -79,7 +79,7 @@
                             <i class="la la-heart fs-3"></i>
                         </span>
                     </div>
-                    <div class="h1 mb-2 mt-2 fw-bold">{{ number_format($totalLikes + $totalBookmarks) }}</div>
+                    <div class="h1 mb-2 mt-2 fw-bold text-body">{{ number_format($totalLikes + $totalBookmarks) }}</div>
                     <div class="d-flex align-items-center gap-2 text-secondary small">
                         <span><i class="la la-heart text-danger"></i> {{ $totalLikes }} Likes</span>
                         <span>•</span>
@@ -91,7 +91,7 @@
 
         <!-- Komentar & Moderasi -->
         <div class="col-sm-6 col-lg-3">
-            <div class="card border-0 shadow-sm">
+            <div class="card border shadow-sm">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="subheader text-uppercase text-secondary fw-semibold">Total Komentar</div>
@@ -99,7 +99,7 @@
                             <i class="la la-comments fs-3"></i>
                         </span>
                     </div>
-                    <div class="h1 mb-2 mt-2 fw-bold">{{ number_format($totalComments) }}</div>
+                    <div class="h1 mb-2 mt-2 fw-bold text-body">{{ number_format($totalComments) }}</div>
                     <div class="text-secondary small">
                         @if($pendingComments > 0)
                             <span class="badge bg-danger text-white"><i class="la la-exclamation-circle"></i> {{ $pendingComments }} Perlu Moderasi</span>
@@ -116,10 +116,10 @@
     <div class="row row-deck row-cards mb-4">
         <!-- Main Line/Area Trend Chart -->
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
+            <div class="card border shadow-sm">
                 <div class="card-header bg-transparent py-3 d-flex align-items-center justify-content-between">
                     <div>
-                        <h3 class="card-title fw-bold m-0">Tren Pembaca & Aktivitas Harian</h3>
+                        <h3 class="card-title fw-bold text-body m-0">Tren Pembaca & Aktivitas Harian</h3>
                         <div class="text-secondary small">Statistik penayangan 7 hari terakhir</div>
                     </div>
                     <span class="badge bg-primary-subtle text-primary">Aktivitas Mingguan</span>
@@ -132,18 +132,18 @@
 
         <!-- Category Distribution Donut Chart -->
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm">
+            <div class="card border shadow-sm">
                 <div class="card-header bg-transparent py-3">
-                    <h3 class="card-title fw-bold m-0">Distribusi Kategori Berita</h3>
+                    <h3 class="card-title fw-bold text-body m-0">Distribusi Kategori Berita</h3>
                 </div>
                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
                     <div id="chart-categories-donut" style="min-height: 210px; width: 100%;"></div>
                     <div class="row g-2 w-100 mt-2">
                         @foreach($categoryDistribution as $cat)
                             <div class="col-6">
-                                <div class="d-flex align-items-center justify-content-between p-2 rounded bg-dark-subtle small">
-                                    <span class="text-truncate me-1">{{ $cat->name }}</span>
-                                    <span class="fw-bold">{{ $cat->articles_count }}</span>
+                                <div class="d-flex align-items-center justify-content-between p-2 rounded bg-body-tertiary border small">
+                                    <span class="text-truncate text-body me-1">{{ $cat->name }}</span>
+                                    <span class="fw-bold text-body">{{ $cat->articles_count }}</span>
                                 </div>
                             </div>
                         @endforeach
@@ -157,9 +157,9 @@
     <div class="row row-deck row-cards mb-4">
         <!-- Status Articles Progress -->
         <div class="col-md-4">
-            <div class="card border-0 shadow-sm">
+            <div class="card border shadow-sm">
                 <div class="card-header bg-transparent py-3">
-                    <h3 class="card-title fw-bold m-0">Status Workflow Redaksi</h3>
+                    <h3 class="card-title fw-bold text-body m-0">Status Workflow Redaksi</h3>
                 </div>
                 <div class="card-body">
                     @php
@@ -171,7 +171,7 @@
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mb-1 small">
                             <span class="text-success fw-semibold"><i class="la la-check-circle"></i> Published (Terbit)</span>
-                            <span class="fw-bold">{{ $publishedArticles }} ({{ $pubPct }}%)</span>
+                            <span class="fw-bold text-body">{{ $publishedArticles }} ({{ $pubPct }}%)</span>
                         </div>
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-success" style="width: {{ $pubPct }}%"></div>
@@ -181,7 +181,7 @@
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mb-1 small">
                             <span class="text-warning fw-semibold"><i class="la la-edit"></i> Draft (Konsep)</span>
-                            <span class="fw-bold">{{ $draftArticles }} ({{ $draftPct }}%)</span>
+                            <span class="fw-bold text-body">{{ $draftArticles }} ({{ $draftPct }}%)</span>
                         </div>
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-warning" style="width: {{ $draftPct }}%"></div>
@@ -191,7 +191,7 @@
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mb-1 small">
                             <span class="text-info fw-semibold"><i class="la la-clock"></i> In Review (Peninjauan)</span>
-                            <span class="fw-bold">{{ $reviewArticles }} ({{ $revPct }}%)</span>
+                            <span class="fw-bold text-body">{{ $reviewArticles }} ({{ $revPct }}%)</span>
                         </div>
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-info" style="width: {{ $revPct }}%"></div>
@@ -201,7 +201,7 @@
                     <div>
                         <div class="d-flex justify-content-between mb-1 small">
                             <span class="text-secondary fw-semibold"><i class="la la-calendar-check"></i> Scheduled (Terjadwal)</span>
-                            <span class="fw-bold">{{ $scheduledArticles }} ({{ $schPct }}%)</span>
+                            <span class="fw-bold text-body">{{ $scheduledArticles }} ({{ $schPct }}%)</span>
                         </div>
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-secondary" style="width: {{ $schPct }}%"></div>
@@ -213,9 +213,9 @@
 
         <!-- Top Trending Articles -->
         <div class="col-md-8">
-            <div class="card border-0 shadow-sm">
+            <div class="card border shadow-sm">
                 <div class="card-header bg-transparent py-3 d-flex align-items-center justify-content-between">
-                    <h3 class="card-title fw-bold m-0"><i class="la la-fire text-danger me-1"></i> Artikel Terpopuler</h3>
+                    <h3 class="card-title fw-bold text-body m-0"><i class="la la-fire text-danger me-1"></i> Artikel Terpopuler</h3>
                     <a href="{{ backpack_url('article') }}" class="btn btn-sm btn-ghost-primary">Lihat Semua</a>
                 </div>
                 <div class="table-responsive">
@@ -266,6 +266,8 @@
         const dates = last7DaysData.map(item => item.date);
         const views = last7DaysData.map(item => item.views);
         const articles = last7DaysData.map(item => item.articles);
+
+        const isDark = document.body.getAttribute('data-bs-theme') === 'dark' || document.documentElement.getAttribute('data-bs-theme') === 'dark';
 
         // 1. Views Trend Smooth Area Chart
         const viewsOptions = {
@@ -318,11 +320,11 @@
             },
             grid: {
                 strokeDashArray: 4,
-                borderColor: 'rgba(255, 255, 255, 0.08)'
+                borderColor: 'rgba(128, 128, 128, 0.15)'
             },
             dataLabels: { enabled: false },
             tooltip: {
-                theme: 'dark',
+                theme: isDark ? 'dark' : 'light',
                 y: {
                     formatter: val => val.toLocaleString() + ' kali'
                 }
@@ -357,6 +359,7 @@
                             total: {
                                 show: true,
                                 label: 'Total Berita',
+                                color: '#6c757d',
                                 formatter: () => catCounts.reduce((a, b) => a + b, 0)
                             }
                         }
@@ -366,7 +369,7 @@
             legend: { show: false },
             dataLabels: { enabled: false },
             tooltip: {
-                theme: 'dark',
+                theme: isDark ? 'dark' : 'light',
                 y: {
                     formatter: val => val + ' artikel'
                 }

@@ -101,9 +101,9 @@
                                         @if(!empty($endpoint['params']))
                                             <div class="col-md-6">
                                                 <div class="fw-semibold small text-uppercase text-secondary mb-1">Query Parameters:</div>
-                                                <div class="bg-dark-subtle p-2 rounded small font-monospace">
+                                                <div class="bg-body-tertiary border p-2 rounded small font-monospace text-body">
                                                     @foreach($endpoint['params'] as $pk => $pv)
-                                                        <div><span class="text-primary">{{ $pk }}</span>: <span class="text-muted">{{ is_array($pv) ? json_encode($pv) : $pv }}</span></div>
+                                                        <div><span class="text-primary fw-semibold">{{ $pk }}</span>: <span class="text-secondary">{{ is_array($pv) ? json_encode($pv) : $pv }}</span></div>
                                                     @endforeach
                                                 </div>
                                             </div>
@@ -112,14 +112,14 @@
                                         @if(!empty($endpoint['body']))
                                             <div class="col-md-6">
                                                 <div class="fw-semibold small text-uppercase text-secondary mb-1">Request Body (JSON):</div>
-                                                <pre class="bg-dark p-2 rounded text-light small mb-0" style="max-height: 180px; overflow-y: auto;"><code>{{ json_encode($endpoint['body'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</code></pre>
+                                                <pre class="bg-dark text-white p-2 rounded small mb-0 border" style="max-height: 180px; overflow-y: auto;"><code>{{ json_encode($endpoint['body'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</code></pre>
                                             </div>
                                         @endif
 
                                         @if(!empty($endpoint['response']))
                                             <div class="{{ empty($endpoint['body']) && empty($endpoint['params']) ? 'col-12' : 'col-md-6' }}">
                                                 <div class="fw-semibold small text-uppercase text-secondary mb-1">Contoh Response (200 OK):</div>
-                                                <pre class="bg-dark p-2 rounded text-light small mb-0" style="max-height: 180px; overflow-y: auto;"><code>{{ is_array($endpoint['response']) ? json_encode($endpoint['response'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : $endpoint['response'] }}</code></pre>
+                                                <pre class="bg-dark text-white p-2 rounded small mb-0 border" style="max-height: 180px; overflow-y: auto;"><code>{{ is_array($endpoint['response']) ? json_encode($endpoint['response'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : $endpoint['response'] }}</code></pre>
                                             </div>
                                         @endif
                                     </div>
