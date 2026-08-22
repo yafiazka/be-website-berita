@@ -23,7 +23,7 @@ class ArticleObserver
             $article->slug = Str::slug($article->slug);
         }
 
-        if ($article->status === 'published' && empty($article->published_at)) {
+        if ($article->status === 'published' && (empty($article->published_at) || $article->published_at > now())) {
             $article->published_at = now();
         }
     }
@@ -36,7 +36,7 @@ class ArticleObserver
             $article->slug = Str::slug($article->slug);
         }
 
-        if ($article->isDirty('status') && $article->status === 'published' && empty($article->published_at)) {
+        if ($article->status === 'published' && (empty($article->published_at) || ($article->isDirty('status') && $article->published_at > now()))) {
             $article->published_at = now();
         }
     }
