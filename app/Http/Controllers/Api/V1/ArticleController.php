@@ -195,6 +195,17 @@ class ArticleController extends Controller
         $data['author_id'] = $request->user()->id;
         $data['status'] = $data['status'] ?? 'draft';
 
+        // Handle uploaded image file or URL string
+        if ($request->hasFile('thumbnail_file')) {
+            $data['thumbnail'] = $request->file('thumbnail_file')->store('articles', 'public');
+        } elseif ($request->hasFile('thumbnail')) {
+            $data['thumbnail'] = $request->file('thumbnail')->store('articles', 'public');
+        } elseif ($request->hasFile('image')) {
+            $data['thumbnail'] = $request->file('image')->store('articles', 'public');
+        }
+
+        unset($data['thumbnail_file'], $data['image']);
+
         $tags = $data['tags'] ?? [];
         unset($data['tags']);
 
@@ -220,6 +231,18 @@ class ArticleController extends Controller
         }
 
         $data = $request->validated();
+
+        // Handle uploaded image file or URL string
+        if ($request->hasFile('thumbnail_file')) {
+            $data['thumbnail'] = $request->file('thumbnail_file')->store('articles', 'public');
+        } elseif ($request->hasFile('thumbnail')) {
+            $data['thumbnail'] = $request->file('thumbnail')->store('articles', 'public');
+        } elseif ($request->hasFile('image')) {
+            $data['thumbnail'] = $request->file('image')->store('articles', 'public');
+        }
+
+        unset($data['thumbnail_file'], $data['image']);
+
         $tags = $data['tags'] ?? null;
         unset($data['tags']);
 

@@ -1,7 +1,17 @@
 <?php
 
+/**
+ * Tujuan: Model Eloquent entitas Artikel berita
+ * Caller: ArticleController, ArticleCrudController, FeedController, BookmarkController
+ * Dependensi: Spatie\Activitylog, Spatie\MediaLibrary, Backpack\CRUD, App\Observers\ArticleObserver
+ * Main Functions: category(), author(), tags(), comments(), approvedComments(), bookmarks(), likes(), scopePublished(), scopeBreaking(), scopeTrending()
+ * Side Effects: DB Read/Write tabel articles, article_tag, activity_log
+ */
+
 namespace App\Models;
 
+use App\Observers\ArticleObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +23,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 
+#[ObservedBy([ArticleObserver::class])]
 class Article extends Model implements HasMedia
 {
     use HasFactory, LogsActivity, InteractsWithMedia, CrudTrait;
@@ -25,6 +36,7 @@ class Article extends Model implements HasMedia
         'excerpt',
         'content',
         'thumbnail',
+        'thumbnail_file',
         'status',
         'is_breaking',
         'published_at',
@@ -34,11 +46,46 @@ class Article extends Model implements HasMedia
         'views_count',
     ];
 
+    protected $appends = [
+        'thumbnail_url',
+    ];
+
     protected $casts = [
         'is_breaking' => 'boolean',
         'published_at' => 'datetime',
         'views_count' => 'integer',
     ];
+
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        if (empty($this->thumbnail)) {
+            return null;
+        }
+
+        if (str_starts_with($this->thumbnail, 'http://') || str_starts_with($this->thumbnail, 'https://')) {
+            return $this->thumbnail;
+        }
+
+        return asset('storage/' . ltrim($this->thumbnail, '/'));
+    }
+
+    public function setThumbnailAttribute($value): void
+    {
+        if ($value instanceof \Illuminate\Http\UploadedFile) {
+            $path = $value->store('articles', 'public');
+            $this->attributes['thumbnail'] = $path;
+        } else {
+            $this->attributes['thumbnail'] = $value;
+        }
+    }
+
+    public function setThumbnailFileAttribute($value): void
+    {
+        if ($value instanceof \Illuminate\Http\UploadedFile) {
+            $path = $value->store('articles', 'public');
+            $this->attributes['thumbnail'] = $path;
+        }
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

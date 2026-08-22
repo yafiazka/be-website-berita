@@ -25,6 +25,7 @@ Aplikasi ini memisahkan fungsionalitas menjadi dua bagian utama:
   - **Pembaca**: Mengakses konten publik, memberi suka (like), menyimpan bacaan (bookmark), dan mengirim komentar.
 
 ### 2. Manajemen Konten dan Alur Redaksi
+- Fleksibilitas Gambar Thumbnail: Mendukung input via **URL Link Eksternal** maupun **Upload Berkas Gambar** (JPG, PNG, WEBP, GIF hingga 5MB) secara langsung baik dari REST API maupun panel CMS.
 - Workflow penerbitan bertahap: Draft, Peninjauan (In Review), Terbit (Published), Terjadwal (Scheduled), dan Arsip (Archived).
 - Hierarki kategori multi-level (kategori induk dan subkategori).
 - Pengelompokan berita menggunakan sistem tags dinamis.

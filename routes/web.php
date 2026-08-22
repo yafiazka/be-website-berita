@@ -14,6 +14,7 @@ Route::get('/api', function () {
         'status' => 'online',
         'api_version' => 'v1',
         'base_url' => url('/api/v1'),
+        'settings' => url('/api/v1/settings'),
         'documentation' => url('/admin/api-docs'),
         'health' => url('/api/v1/health'),
     ]);

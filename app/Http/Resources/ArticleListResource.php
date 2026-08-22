@@ -14,7 +14,7 @@ class ArticleListResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
-            'thumbnail' => $this->thumbnail,
+            'thumbnail' => $this->thumbnail_url ?? $this->thumbnail,
             'status' => $this->status,
             'is_breaking' => (bool)$this->is_breaking,
             'published_at' => $this->published_at?->toIso8601String(),

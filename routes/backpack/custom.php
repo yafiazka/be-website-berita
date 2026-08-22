@@ -22,6 +22,8 @@ Route::group([
     Route::crud('tag', 'TagCrudController');
     Route::crud('comment', 'CommentCrudController');
     Route::crud('user', 'UserCrudController');
+    Route::get('setting-fe', 'SettingFeController@index')->name('admin.setting_fe');
+    Route::post('setting-fe', 'SettingFeController@update')->name('admin.setting_fe.update');
     Route::get('api-docs', 'ApiDocsController@index')->name('admin.api_docs');
     Route::get('api-docs/download-postman', 'ApiDocsController@downloadPostman')->name('admin.api_docs.postman');
 });

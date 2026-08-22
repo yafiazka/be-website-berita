@@ -26,6 +26,16 @@ class ArticleCrudController extends CrudController
 
     protected function setupListOperation(): void
     {
+        CRUD::column('thumbnail_url')
+            ->label('Thumbnail')
+            ->type('custom_html')
+            ->value(function ($entry) {
+                if ($entry->thumbnail_url) {
+                    return '<img src="' . e($entry->thumbnail_url) . '" style="width: 48px; height: 36px; object-fit: cover; border-radius: 4px;" alt="thumbnail" onerror="this.style.display=\'none\'" />';
+                }
+                return '<span class="text-secondary small">-</span>';
+            });
+
         CRUD::column('title')->label('Judul Artikel');
         CRUD::column('category_id')->type('select')->entity('category')->attribute('name')->label('Kategori');
         CRUD::column('author_id')->type('select')->entity('author')->attribute('name')->label('Penulis');
@@ -42,13 +52,26 @@ class ArticleCrudController extends CrudController
             'category_id' => 'required|exists:categories,id',
             'content' => 'required',
             'status' => 'required|in:draft,review,published,archived',
+            'thumbnail_file' => 'nullable|file|image|mimes:jpeg,png,jpg,webp,gif,svg|max:5120',
         ]);
 
         CRUD::field('title')->label('Judul Artikel');
-        CRUD::field('slug')->label('Slug (opsional / otomatis)');
+        CRUD::field('slug')->label('Slug (opsional / otomatis terbuat)');
         CRUD::field('category_id')->type('select')->entity('category')->attribute('name')->label('Kategori');
         CRUD::field('author_id')->type('select')->entity('author')->attribute('name')->default(backpack_user()?->id)->label('Penulis');
-        CRUD::field('thumbnail')->type('url')->label('URL Gambar Thumbnail');
+        
+        // Pilihan 1: Upload File Gambar
+        CRUD::field('thumbnail_file')
+            ->type('upload')
+            ->label('Upload File Gambar / Thumbnail')
+            ->hint('Format: JPG, PNG, WEBP, GIF (Maks: 5MB). File ini akan otomatis disimpan di storage dan dijadikan thumbnail berita.');
+
+        // Pilihan 2: URL Link Gambar
+        CRUD::field('thumbnail')
+            ->type('text')
+            ->label('Atau Masukkan URL Gambar (Opsional)')
+            ->hint('Contoh: https://images.unsplash.com/... (Gunakan jika tidak mengunggah file langsung)');
+
         CRUD::field('excerpt')->type('textarea')->label('Ringkasan / Excerpt');
         CRUD::field('content')->type('textarea')->label('Konten Berita');
         CRUD::field('tags')->type('select_multiple')->entity('tags')->attribute('name')->pivot(true)->label('Tags');

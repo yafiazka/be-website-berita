@@ -19,11 +19,13 @@ use App\Http\Controllers\Api\V1\SearchController;
 use App\Http\Controllers\Api\V1\DashboardStatController;
 use App\Http\Controllers\Api\V1\ActivityLogController;
 use App\Http\Controllers\Api\V1\FeedController;
+use App\Http\Controllers\Api\V1\SettingController;
 
 Route::prefix('v1')->group(function () {
 
-    // ── Health Check ──────────────────────────────────────────
+    // ── Health Check & Settings ────────────────────────────────
     Route::get('/health', [FeedController::class, 'health']);
+    Route::get('/settings', [SettingController::class, 'index']);
 
     // ── Autentikasi ───────────────────────────────────────────
     Route::prefix('auth')->group(function () {
@@ -106,7 +108,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/media/upload', [MediaController::class, 'upload']);
         Route::delete('/media', [MediaController::class, 'destroy'])->middleware('role:Admin|Editor');
 
-        // Users & Roles Management (Admin only)
+        // Users & Roles & Settings Management (Admin only)
         Route::middleware('role:Admin')->group(function () {
             Route::get('/users', [UserController::class, 'index']);
             Route::post('/users', [UserController::class, 'store']);
@@ -115,6 +117,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('/users/{id}', [UserController::class, 'destroy']);
             Route::get('/roles', [RoleController::class, 'index']);
             Route::get('/activity-logs', [ActivityLogController::class, 'index']);
+            Route::put('/settings', [SettingController::class, 'update']);
         });
 
         // Dashboard Stats

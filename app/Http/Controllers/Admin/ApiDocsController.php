@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Tujuan: Controller Admin Backpack untuk menampilkan & mengekspor dokumentasi interaktif REST API v1
+ * Caller: Route admin.api_docs, admin.api_docs.postman
+ * Dependensi: App\Http\Controllers\Controller
+ * Main Functions: index(), downloadPostman(), getEndpoints(), generatePostmanCollection()
+ * Side Effects: Generate JSON file download Postman Collection
+ */
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -31,6 +39,143 @@ class ApiDocsController extends Controller
     private function getEndpoints(): array
     {
         return [
+            // PENGATURAN & TEMPLATE FRONTEND
+            [
+                'category' => 'Pengaturan Frontend (Settings)',
+                'name' => 'Ambil Pengaturan Website (FE Settings)',
+                'method' => 'GET',
+                'path' => '/api/v1/settings',
+                'auth' => 'Public',
+                'description' => 'Mendapatkan konfigurasi template, tema warna, modul beranda (breaking news ticker, trending topics, video), identitas situs, logo, link sosial media, kontak, dan navigasi footer untuk frontend.',
+                'headers' => ['Accept' => 'application/json'],
+                'response' => [
+                    'success' => true,
+                    'message' => 'Pengaturan website berhasil dimuat.',
+                    'data' => [
+                        'site' => [
+                            'name' => 'Berita Satu Nusa',
+                            'tagline' => 'Portal Berita Terkini & Terpercaya Nusantara',
+                            'description' => 'Menyajikan berita terkini, aktual, tajam, dan terpercaya seputar peristiwa nasional, internasional, teknologi, bisnis, gaya hidup, dan hiburan.',
+                            'logo_url' => '/template/images/logo.svg',
+                            'logo_footer_url' => '/template/images/white_logo.svg',
+                            'favicon_url' => '/favicon.ico',
+                            'author' => 'Redaksi Berita Satu Nusa',
+                            'language' => 'id',
+                            'timezone' => 'Asia/Jakarta',
+                        ],
+                        'theme' => [
+                            'default_mode' => 'light',
+                            'enable_theme_toggle' => true,
+                            'primary_color' => '#d62828',
+                            'primary_hover' => '#b22222',
+                            'secondary_color' => '#003049',
+                            'accent_color' => '#f77f00',
+                            'dark_bg' => '#0f172a',
+                            'light' => [
+                                'background' => '#ffffff',
+                                'surface_bg' => '#ffffff',
+                                'topbar_bg' => '#f8fafc',
+                                'header_bg' => '#ffffff',
+                                'footer_bg' => '#1e293b',
+                                'footer_text' => '#cbd5e1',
+                                'primary_color' => '#d62828',
+                                'primary_hover' => '#b22222',
+                                'secondary_color' => '#003049',
+                                'accent_color' => '#f77f00',
+                                'text_primary' => '#0f172a',
+                                'text_secondary' => '#475569',
+                                'text_muted' => '#94a3b8',
+                                'border_color' => '#e2e8f0',
+                            ],
+                            'dark' => [
+                                'background' => '#0f172a',
+                                'surface_bg' => '#1e293b',
+                                'topbar_bg' => '#0b0f19',
+                                'header_bg' => '#0f172a',
+                                'footer_bg' => '#080c14',
+                                'footer_text' => '#94a3b8',
+                                'primary_color' => '#ef4444',
+                                'primary_hover' => '#f87171',
+                                'secondary_color' => '#38bdf8',
+                                'accent_color' => '#fbbf24',
+                                'text_primary' => '#f8fafc',
+                                'text_secondary' => '#cbd5e1',
+                                'text_muted' => '#64748b',
+                                'border_color' => '#334155',
+                            ],
+                        ],
+                        'features' => [
+                            'breaking_news_ticker' => ['enabled' => true, 'title' => 'Breaking News', 'autoplay_speed' => 4000],
+                            'trending_section' => ['enabled' => true, 'title' => 'Trending Topics', 'limit' => 6],
+                            'video_news_section' => ['enabled' => true, 'title' => 'Video Berita Terpopuler', 'limit' => 4],
+                            'newsletter' => ['enabled' => true, 'title' => 'Berlangganan Buletin Berita'],
+                            'reading_time' => ['enabled' => true],
+                            'comments' => ['enabled' => true, 'require_moderation' => true, 'allow_guest' => false],
+                            'social_share' => ['enabled' => true, 'platforms' => ['whatsapp', 'facebook', 'twitter', 'telegram', 'copy_link']],
+                        ],
+                        'contact' => [
+                            'email' => 'redaksi@beritasatunusa.id',
+                            'phone' => '+62 21 555 1234',
+                            'whatsapp' => '+62 812 3456 7890',
+                            'address' => 'Gedung Cyber 2 Lt. 15, Jl. H.R. Rasuna Said, Jakarta Selatan',
+                        ],
+                        'social_links' => [
+                            'facebook' => 'https://facebook.com/beritasatunusa',
+                            'twitter' => 'https://twitter.com/beritasatunusa',
+                            'instagram' => 'https://instagram.com/beritasatunusa',
+                            'youtube' => 'https://youtube.com/@beritasatunusa',
+                        ],
+                        'navigation' => [
+                            'topbar_menu' => [
+                                ['label' => 'Tentang Kami', 'url' => '/tentang-kami'],
+                                ['label' => 'Pedoman Media Siber', 'url' => '/pedoman-media-siber'],
+                                ['label' => 'Kontak', 'url' => '/kontak'],
+                            ],
+                            'footer_menu_quick_links' => [
+                                ['label' => 'Beranda', 'url' => '/'],
+                                ['label' => 'Trending', 'url' => '/trending'],
+                                ['label' => 'Video Berita', 'url' => '/video'],
+                            ],
+                        ],
+                        'footer' => [
+                            'about_text' => 'Berita Satu Nusa adalah media siber independen yang berkomitmen menyajikan jurnalisme berkualitas.',
+                            'copyright_text' => '© 2026 Berita Satu Nusa. Seluruh hak cipta dilindungi undang-undang.',
+                        ],
+                        'ads' => [
+                            'header_banner' => ['enabled' => false, 'image_url' => '', 'target_url' => ''],
+                            'sidebar_banner' => ['enabled' => false, 'image_url' => '', 'target_url' => ''],
+                        ],
+                        'analytics' => [
+                            'google_analytics_id' => '',
+                            'google_tag_manager_id' => '',
+                        ],
+                    ],
+                ],
+            ],
+            [
+                'category' => 'Pengaturan Frontend (Settings)',
+                'name' => 'Update Pengaturan Website (Admin)',
+                'method' => 'PUT',
+                'path' => '/api/v1/dashboard/settings',
+                'auth' => 'Bearer Token (Admin)',
+                'description' => 'Memperbarui konfigurasi pengaturan template dan modul frontend.',
+                'headers' => ['Authorization' => 'Bearer {{token}}', 'Content-Type' => 'application/json', 'Accept' => 'application/json'],
+                'body' => [
+                    'site' => [
+                        'name' => 'Berita Satu Nusa',
+                        'tagline' => 'Portal Berita Terkini & Terpercaya',
+                    ],
+                    'theme' => [
+                        'primary_color' => '#d62828',
+                        'default_mode' => 'light',
+                    ],
+                ],
+                'response' => [
+                    'success' => true,
+                    'message' => 'Pengaturan website berhasil diperbarui.',
+                    'data' => [],
+                ],
+            ],
             // AUTHENTICATION
             [
                 'category' => 'Authentication',
@@ -215,9 +360,10 @@ class ApiDocsController extends Controller
                     'category_id' => 1,
                     'excerpt' => 'Ringkasan singkat berita...',
                     'content' => '<p>Isi lengkap berita...</p>',
+                    'thumbnail' => 'https://images.unsplash.com/... (URL link gambar)',
+                    'thumbnail_file' => '[File binary / Upload gambar: jpg, png, webp (opsional)]',
                     'status' => 'draft',
                     'tags' => [1, 2],
-                    'is_featured' => false,
                     'is_breaking' => false,
                 ],
                 'response' => ['success' => true, 'message' => 'Artikel berhasil dibuat.', 'data' => ['id' => 10]],

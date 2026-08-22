@@ -1,0 +1,198 @@
+{
+    "success": true,
+    "message": "Pengaturan website berhasil dimuat.",
+    "data": {
+        "site": {
+            "name": "Berita Satu Nusa",
+            "tagline": "Portal Berita Terkini & Terpercaya Nusantara",
+            "description": "Menyajikan berita terkini, aktual, tajam, dan terpercaya seputar peristiwa nasional, internasional, teknologi, bisnis, gaya hidup, dan hiburan di seluruh penjuru nusantara.",
+            "keywords": "berita satu nusa, portal berita indonesia, kabar nusantara, berita terkini, nasional, internasional, teknologi, bisnis",
+            "logo_url": "/template/images/logo.svg",
+            "logo_footer_url": "/template/images/white_logo.svg",
+            "favicon_url": "/favicon.ico",
+            "author": "Redaksi Berita Satu Nusa",
+            "language": "id",
+            "timezone": "Asia/Jakarta"
+        },
+        "theme": {
+            "default_mode": "light",
+            "enable_theme_toggle": true,
+            "primary_color": "#d62828",
+            "primary_hover": "#b22222",
+            "secondary_color": "#003049",
+            "accent_color": "#f77f00",
+            "dark_bg": "#0f172a",
+            "light": {
+                "background": "#ffffff",
+                "surface_bg": "#ffffff",
+                "topbar_bg": "#f8fafc",
+                "header_bg": "#ffffff",
+                "footer_bg": "#1e293b",
+                "footer_text": "#cbd5e1",
+                "primary_color": "#d62828",
+                "primary_hover": "#b22222",
+                "secondary_color": "#003049",
+                "accent_color": "#f77f00",
+                "text_primary": "#0f172a",
+                "text_secondary": "#475569",
+                "text_muted": "#94a3b8",
+                "border_color": "#e2e8f0"
+            },
+            "dark": {
+                "background": "#0f172a",
+                "surface_bg": "#1e293b",
+                "topbar_bg": "#0b0f19",
+                "header_bg": "#0f172a",
+                "footer_bg": "#080c14",
+                "footer_text": "#94a3b8",
+                "primary_color": "#ef4444",
+                "primary_hover": "#f87171",
+                "secondary_color": "#38bdf8",
+                "accent_color": "#fbbf24",
+                "text_primary": "#f8fafc",
+                "text_secondary": "#cbd5e1",
+                "text_muted": "#64748b",
+                "border_color": "#334155"
+            }
+        },
+        "features": {
+            "breaking_news_ticker": {
+                "enabled": true,
+                "title": "Breaking News",
+                "autoplay_speed": 4000
+            },
+            "trending_section": {
+                "enabled": true,
+                "title": "Trending Topics",
+                "limit": 6
+            },
+            "video_news_section": {
+                "enabled": true,
+                "title": "Video Berita Terpopuler",
+                "limit": 4
+            },
+            "newsletter": {
+                "enabled": true,
+                "title": "Berlangganan Buletin Berita",
+                "description": "Dapatkan rangkuman berita terpopuler langsung di kotak masuk email Anda setiap pagi."
+            },
+            "reading_time": {
+                "enabled": true
+            },
+            "comments": {
+                "enabled": true,
+                "require_moderation": true,
+                "allow_guest": false
+            },
+            "social_share": {
+                "enabled": false,
+                "platforms": [
+                    "whatsapp",
+                    "facebook",
+                    "twitter",
+                    "telegram",
+                    "copy_link"
+                ]
+            }
+        },
+        "contact": {
+            "email": "redaksi@24news.id",
+            "phone": "+62 21 555 1234",
+            "whatsapp": "+62 812 3456 7890",
+            "address": "Gedung Cyber 2 Lt. 15, Jl. H.R. Rasuna Said Blok X-5 No. 13, Jakarta Selatan, 12950",
+            "google_maps_embed_url": ""
+        },
+        "social_links": {
+            "facebook": "https://facebook.com/24newsid",
+            "twitter": "https://twitter.com/24newsid",
+            "instagram": "https://instagram.com/24newsid",
+            "youtube": "https://youtube.com/@24newsid",
+            "tiktok": "https://tiktok.com/@24newsid",
+            "linkedin": "https://linkedin.com/company/24newsid"
+        },
+        "navigation": {
+            "topbar_menu": [
+                {
+                    "label": "Tentang Kami",
+                    "url": "/tentang-kami"
+                },
+                {
+                    "label": "Pedoman Media Siber",
+                    "url": "/pedoman-media-siber"
+                },
+                {
+                    "label": "Kontak",
+                    "url": "/kontak"
+                },
+                {
+                    "label": "Karir",
+                    "url": "/karir"
+                }
+            ],
+            "footer_menu_quick_links": [
+                {
+                    "label": "Beranda",
+                    "url": "/"
+                },
+                {
+                    "label": "Trending",
+                    "url": "/trending"
+                },
+                {
+                    "label": "Video Berita",
+                    "url": "/video"
+                },
+                {
+                    "label": "Indeks Berita",
+                    "url": "/indeks"
+                }
+            ],
+            "footer_menu_legal": [
+                {
+                    "label": "Kebijakan Privasi",
+                    "url": "/kebijakan-privasi"
+                },
+                {
+                    "label": "Syarat & Ketentuan",
+                    "url": "/syarat-ketentuan"
+                },
+                {
+                    "label": "Disclaimer",
+                    "url": "/disclaimer"
+                },
+                {
+                    "label": "Hak Cipta",
+                    "url": "/hak-cipta"
+                }
+            ]
+        },
+        "footer": {
+            "about_text": "Berita Satu Nusa adalah media siber independen yang berkomitmen menyajikan jurnalisme berkualitas, berimbang, dan berpegang teguh pada kode etik jurnalistik demi mencerdaskan bangsa.",
+            "copyright_text": "© 2026 Berita Satu Nusa. Seluruh hak cipta dilindungi undang-undang."
+        },
+        "ads": {
+            "header_banner": {
+                "enabled": false,
+                "image_url": null,
+                "target_url": null,
+                "alt_text": ""
+            },
+            "sidebar_banner": {
+                "enabled": false,
+                "image_url": null,
+                "target_url": null,
+                "alt_text": ""
+            },
+            "article_bottom_banner": {
+                "enabled": false,
+                "image_url": null,
+                "target_url": null,
+                "alt_text": ""
+            }
+        },
+        "analytics": {
+            "google_analytics_id": null,
+            "google_tag_manager_id": null
+        }
+    }
+}
