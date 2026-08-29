@@ -203,16 +203,15 @@ class ArticleController extends Controller
             $data['excerpt'] = \Illuminate\Support\Str::limit(strip_tags($data['content']), 160);
         }
 
-        // Handle uploaded image file or URL string
-        if ($request->hasFile('thumbnail_file')) {
-            $data['thumbnail'] = $request->file('thumbnail_file')->store('articles', 'public');
-        } elseif ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $request->file('thumbnail')->store('articles', 'public');
-        } elseif ($request->hasFile('image')) {
-            $data['thumbnail'] = $request->file('image')->store('articles', 'public');
-        } elseif (empty($data['thumbnail']) && !empty($data['thumbnail_url'])) {
-            $data['thumbnail'] = $data['thumbnail_url'];
-        }
+        // Handle uploaded image file, base64, or URL string with auto-compression
+        $rawThumbnail = $request->file('thumbnail_file')
+            ?? $request->file('thumbnail')
+            ?? $request->file('image')
+            ?? $data['thumbnail']
+            ?? $data['thumbnail_url']
+            ?? null;
+
+        $data['thumbnail'] = \App\Services\ImageService::processAndStore($rawThumbnail, 'articles');
 
         unset($data['thumbnail_file'], $data['image'], $data['thumbnail_url']);
 
@@ -242,15 +241,16 @@ class ArticleController extends Controller
 
         $data = $request->validated();
 
-        // Handle uploaded image file or URL string
-        if ($request->hasFile('thumbnail_file')) {
-            $data['thumbnail'] = $request->file('thumbnail_file')->store('articles', 'public');
-        } elseif ($request->hasFile('thumbnail')) {
-            $data['thumbnail'] = $request->file('thumbnail')->store('articles', 'public');
-        } elseif ($request->hasFile('image')) {
-            $data['thumbnail'] = $request->file('image')->store('articles', 'public');
-        } elseif (isset($data['thumbnail_url']) && empty($data['thumbnail'])) {
-            $data['thumbnail'] = $data['thumbnail_url'];
+        // Handle uploaded image file, base64, or URL string with auto-compression
+        if ($request->hasFile('thumbnail_file') || $request->hasFile('thumbnail') || $request->hasFile('image') || isset($data['thumbnail']) || isset($data['thumbnail_url'])) {
+            $rawThumbnail = $request->file('thumbnail_file')
+                ?? $request->file('thumbnail')
+                ?? $request->file('image')
+                ?? $data['thumbnail']
+                ?? $data['thumbnail_url']
+                ?? null;
+
+            $data['thumbnail'] = \App\Services\ImageService::processAndStore($rawThumbnail, 'articles');
         }
 
         unset($data['thumbnail_file'], $data['image'], $data['thumbnail_url']);

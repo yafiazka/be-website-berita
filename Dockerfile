@@ -44,6 +44,9 @@ RUN echo '<Directory /var/www/html/public>\n\
 </Directory>' > /etc/apache2/conf-available/override.conf && a2enconf override
 RUN a2enmod rewrite headers
 
+# PHP Upload limits
+RUN echo "upload_max_filesize = 50M\npost_max_size = 60M\nmemory_limit = 256M\n" > /usr/local/etc/php/conf.d/uploads.ini
+
 # Working directory
 WORKDIR /var/www/html
 

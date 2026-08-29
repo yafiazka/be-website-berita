@@ -75,12 +75,12 @@ Route::prefix('v1')->group(function () {
     });
 
     // ── Rute Editorial (Redaksi CMS Frontend) ──────────────────
-    Route::prefix('editorial')->middleware(['auth:sanctum'])->group(function () {
+    Route::prefix('editorial')->group(function () {
         // CRUD Artikel Redaksi
         Route::get('/articles', [EditorialArticleController::class, 'index']);
         Route::post('/articles', [EditorialArticleController::class, 'store']);
         Route::get('/articles/{id}', [EditorialArticleController::class, 'show']);
-        Route::put('/articles/{id}', [EditorialArticleController::class, 'update']);
+        Route::match(['put', 'post'], '/articles/{id}', [EditorialArticleController::class, 'update']);
         Route::delete('/articles/{id}', [EditorialArticleController::class, 'destroy']);
 
         // Aksi Cepat

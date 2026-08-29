@@ -13,29 +13,28 @@ class MediaController extends Controller
 {
     public function upload(Request $request): JsonResponse
     {
-        $request->validate([
-            'file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,avif,svg|max:5120',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,avif,svg|max:5120',
-        ]);
+        $rawImage = $request->file('image')
+            ?? $request->file('file')
+            ?? $request->input('image')
+            ?? $request->input('file');
 
-        $file = $request->file('image') ?? $request->file('file');
-        if (!$file) {
-            return ApiResponse::error('Berkas gambar wajib diunggah.', 422);
+        if (!$rawImage) {
+            return ApiResponse::error('Berkas gambar atau data base64 wajib dikirimkan.', 422);
         }
 
-        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('articles', $filename, 'public');
+        $path = \App\Services\ImageService::processAndStore($rawImage, 'articles');
+        if (!$path) {
+            return ApiResponse::error('Gagal memproses dan mengoptimasi berkas gambar.', 400);
+        }
 
-        $url = asset('storage/' . $path);
+        $url = str_starts_with($path, 'http') ? $path : asset('storage/' . $path);
 
         return ApiResponse::success([
-            'file_name' => $file->getClientOriginalName(),
+            'file_name' => basename($path),
             'file_path' => $path,
             'path' => $path,
             'url' => $url,
-            'mime_type' => $file->getClientMimeType(),
-            'size' => $file->getSize(),
-        ], 'Media berhasil diunggah.', 201);
+        ], 'Media berhasil diunggah dan dioptimasi.', 201);
     }
 
     public function destroy(Request $request): JsonResponse

@@ -84,19 +84,29 @@ class Article extends Model implements HasMedia
 
     public function setThumbnailAttribute($value): void
     {
-        if ($value instanceof \Illuminate\Http\UploadedFile) {
-            $path = $value->store('articles', 'public');
-            $this->attributes['thumbnail'] = $path;
-        } else {
-            $this->attributes['thumbnail'] = $value;
+        if ($value === null || $value === '') {
+            $this->attributes['thumbnail'] = null;
+            return;
         }
+
+        if ($value instanceof \Illuminate\Http\UploadedFile) {
+            $this->attributes['thumbnail'] = \App\Services\ImageService::processAndStore($value, 'articles');
+            return;
+        }
+
+        if (is_string($value) && preg_match('/^data:image\/(\w+);base64,/', $value)) {
+            $this->attributes['thumbnail'] = \App\Services\ImageService::processAndStore($value, 'articles');
+            return;
+        }
+
+        // Direct string path or external URL
+        $this->attributes['thumbnail'] = $value;
     }
 
     public function setThumbnailFileAttribute($value): void
     {
-        if ($value instanceof \Illuminate\Http\UploadedFile) {
-            $path = $value->store('articles', 'public');
-            $this->attributes['thumbnail'] = $path;
+        if ($value instanceof \Illuminate\Http\UploadedFile || (is_string($value) && preg_match('/^data:image\/(\w+);base64,/', $value))) {
+            $this->attributes['thumbnail'] = \App\Services\ImageService::processAndStore($value, 'articles');
         }
     }
 
