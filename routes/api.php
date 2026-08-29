@@ -85,6 +85,9 @@ Route::prefix('v1')->group(function () {
 
         // Aksi Cepat
         Route::post('/articles/{id}/publish', [EditorialArticleController::class, 'publish']);
+        Route::post('/articles/{id}/archive', [EditorialArticleController::class, 'archive']);
+        Route::post('/articles/{id}/hide', [EditorialArticleController::class, 'hide']);
+        Route::post('/articles/{id}/draft', [EditorialArticleController::class, 'draft']);
 
         // Upload Media / Gambar langsung dari Editor
         Route::post('/media/upload', [EditorialMediaController::class, 'upload']);

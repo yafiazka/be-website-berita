@@ -137,17 +137,24 @@
                     <h3 class="card-title fw-bold text-body m-0">Distribusi Kategori Berita</h3>
                 </div>
                 <div class="card-body d-flex flex-column align-items-center justify-content-center">
-                    <div id="chart-categories-donut" style="min-height: 210px; width: 100%;"></div>
-                    <div class="row g-2 w-100 mt-2">
-                        @foreach($categoryDistribution as $cat)
-                            <div class="col-6">
-                                <div class="d-flex align-items-center justify-content-between p-2 rounded bg-body-tertiary border small">
-                                    <span class="text-truncate text-body me-1">{{ $cat->name }}</span>
-                                    <span class="fw-bold text-body">{{ $cat->articles_count }}</span>
+                    @if($totalArticles > 0 && $categoryDistribution->sum('articles_count') > 0)
+                        <div id="chart-categories-donut" style="min-height: 210px; width: 100%;"></div>
+                        <div class="row g-2 w-100 mt-2">
+                            @foreach($categoryDistribution as $cat)
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center justify-content-between p-2 rounded bg-body-tertiary border small">
+                                        <span class="text-truncate text-body me-1">{{ $cat->name }}</span>
+                                        <span class="fw-bold text-body">{{ $cat->articles_count }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        @endforeach
-                    </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center text-secondary py-5">
+                            <i class="la la-pie-chart fs-1 d-block mb-2 opacity-50"></i>
+                            <span class="small fw-semibold">Belum ada artikel yang dikaitkan ke kategori.</span>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -167,6 +174,7 @@
                         $draftPct = $totalArticles > 0 ? round(($draftArticles / $totalArticles) * 100) : 0;
                         $revPct = $totalArticles > 0 ? round(($reviewArticles / $totalArticles) * 100) : 0;
                         $schPct = $totalArticles > 0 ? round(($scheduledArticles / $totalArticles) * 100) : 0;
+                        $arcPct = $totalArticles > 0 ? round(($archivedArticles / $totalArticles) * 100) : 0;
                     @endphp
                     <div class="mb-3">
                         <div class="d-flex justify-content-between mb-1 small">
@@ -198,13 +206,23 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div class="mb-3">
                         <div class="d-flex justify-content-between mb-1 small">
                             <span class="text-secondary fw-semibold"><i class="la la-calendar-check"></i> Scheduled (Terjadwal)</span>
                             <span class="fw-bold text-body">{{ $scheduledArticles }} ({{ $schPct }}%)</span>
                         </div>
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-secondary" style="width: {{ $schPct }}%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="d-flex justify-content-between mb-1 small">
+                            <span class="text-danger fw-semibold"><i class="la la-eye-slash"></i> Archived (Disembunyikan)</span>
+                            <span class="fw-bold text-body">{{ $archivedArticles }} ({{ $arcPct }}%)</span>
+                        </div>
+                        <div class="progress progress-sm">
+                            <div class="progress-bar bg-danger" style="width: {{ $arcPct }}%"></div>
                         </div>
                     </div>
                 </div>
@@ -338,44 +356,47 @@
         new ApexCharts(document.querySelector("#chart-views-trend"), viewsOptions).render();
 
         // 2. Category Donut Chart
-        const catLabels = categoryData.map(c => c.name);
-        const catCounts = categoryData.map(c => c.articles_count);
+        const catDonutEl = document.querySelector("#chart-categories-donut");
+        if (catDonutEl) {
+            const catLabels = categoryData.map(c => c.name);
+            const catCounts = categoryData.map(c => c.articles_count);
 
-        const donutOptions = {
-            chart: {
-                type: 'donut',
-                height: 210,
-                fontFamily: 'inherit'
-            },
-            series: catCounts.length > 0 ? catCounts : [1],
-            labels: catLabels.length > 0 ? catLabels : ['Belum Ada Data'],
-            colors: ['#206bc4', '#2fb344', '#f76707', '#d63939', '#4299e1', '#ae3ec9'],
-            plotOptions: {
-                pie: {
-                    donut: {
-                        size: '72%',
-                        labels: {
-                            show: true,
-                            total: {
+            const donutOptions = {
+                chart: {
+                    type: 'donut',
+                    height: 210,
+                    fontFamily: 'inherit'
+                },
+                series: catCounts,
+                labels: catLabels,
+                colors: ['#206bc4', '#2fb344', '#f76707', '#d63939', '#4299e1', '#ae3ec9'],
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '72%',
+                            labels: {
                                 show: true,
-                                label: 'Total Berita',
-                                color: '#6c757d',
-                                formatter: () => catCounts.reduce((a, b) => a + b, 0)
+                                total: {
+                                    show: true,
+                                    label: 'Total Berita',
+                                    color: '#6c757d',
+                                    formatter: () => catCounts.reduce((a, b) => a + b, 0)
+                                }
                             }
                         }
                     }
+                },
+                legend: { show: false },
+                dataLabels: { enabled: false },
+                tooltip: {
+                    theme: isDark ? 'dark' : 'light',
+                    y: {
+                        formatter: val => val + ' artikel'
+                    }
                 }
-            },
-            legend: { show: false },
-            dataLabels: { enabled: false },
-            tooltip: {
-                theme: isDark ? 'dark' : 'light',
-                y: {
-                    formatter: val => val + ' artikel'
-                }
-            }
-        };
-        new ApexCharts(document.querySelector("#chart-categories-donut"), donutOptions).render();
+            };
+            new ApexCharts(catDonutEl, donutOptions).render();
+        }
     });
 </script>
 @endpush

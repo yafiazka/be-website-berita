@@ -24,7 +24,8 @@ class DashboardController extends Controller
         $draftArticles = Article::where('status', 'draft')->count();
         $reviewArticles = Article::where('status', 'review')->count();
         $scheduledArticles = Article::where('status', 'scheduled')->count();
-        $totalViews = Article::sum('views_count');
+        $archivedArticles = Article::where('status', 'archived')->count();
+        $totalViews = (int) Article::sum('views_count');
 
         $totalCategories = Category::count();
         $totalTags = Tag::count();
@@ -76,6 +77,7 @@ class DashboardController extends Controller
             'draftArticles',
             'reviewArticles',
             'scheduledArticles',
+            'archivedArticles',
             'totalViews',
             'totalCategories',
             'totalTags',

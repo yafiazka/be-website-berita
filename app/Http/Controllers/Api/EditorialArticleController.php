@@ -217,6 +217,43 @@ class EditorialArticleController extends Controller
         ]);
     }
 
+    public function archive(Request $request, $id): JsonResponse
+    {
+        $article = Article::findOrFail($id);
+        Gate::authorize('update', $article);
+
+        $article->update([
+            'status' => 'archived',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Artikel berhasil diarsipkan / disembunyikan.',
+            'data'    => $article->fresh(['category', 'tags']),
+        ]);
+    }
+
+    public function hide(Request $request, $id): JsonResponse
+    {
+        return $this->archive($request, $id);
+    }
+
+    public function draft(Request $request, $id): JsonResponse
+    {
+        $article = Article::findOrFail($id);
+        Gate::authorize('update', $article);
+
+        $article->update([
+            'status' => 'draft',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status artikel dikembalikan menjadi draf.',
+            'data'    => $article->fresh(['category', 'tags']),
+        ]);
+    }
+
     public function stats(Request $request): JsonResponse
     {
         $user  = $request->user();
@@ -230,6 +267,7 @@ class EditorialArticleController extends Controller
         $publishedArticles = (clone $query)->where('status', 'published')->count();
         $draftArticles     = (clone $query)->where('status', 'draft')->count();
         $reviewArticles    = (clone $query)->where('status', 'review')->count();
+        $archivedArticles  = (clone $query)->where('status', 'archived')->count();
         $totalViews        = (int) (clone $query)->sum('views_count');
 
         return response()->json([
@@ -239,12 +277,14 @@ class EditorialArticleController extends Controller
                 'published_articles' => $publishedArticles,
                 'draft_articles'     => $draftArticles,
                 'review_articles'    => $reviewArticles,
+                'archived_articles'  => $archivedArticles,
                 'total_views'        => $totalViews,
                 'articles' => [
                     'total'     => $totalArticles,
                     'published' => $publishedArticles,
                     'draft'     => $draftArticles,
                     'review'    => $reviewArticles,
+                    'archived'  => $archivedArticles,
                     'views'     => $totalViews,
                 ],
             ],

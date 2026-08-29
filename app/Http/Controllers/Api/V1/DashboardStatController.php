@@ -20,7 +20,8 @@ class DashboardStatController extends Controller
         $publishedArticles = Article::where('status', 'published')->count();
         $draftArticles = Article::where('status', 'draft')->count();
         $reviewArticles = Article::where('status', 'review')->count();
-        $totalViews = Article::sum('views_count');
+        $archivedArticles = Article::where('status', 'archived')->count();
+        $totalViews = (int) Article::sum('views_count');
         $totalComments = Comment::count();
         $pendingComments = Comment::where('status', 'pending')->count();
         $totalUsers = User::count();
@@ -32,7 +33,8 @@ class DashboardStatController extends Controller
             'published_articles' => $publishedArticles,
             'draft_articles' => $draftArticles,
             'review_articles' => $reviewArticles,
-            'total_views' => (int) $totalViews,
+            'archived_articles' => $archivedArticles,
+            'total_views' => $totalViews,
             'total_comments' => $totalComments,
             'pending_comments' => $pendingComments,
             'total_users' => $totalUsers,
@@ -43,7 +45,8 @@ class DashboardStatController extends Controller
                 'published' => $publishedArticles,
                 'draft' => $draftArticles,
                 'review' => $reviewArticles,
-                'views' => (int) $totalViews,
+                'archived' => $archivedArticles,
+                'views' => $totalViews,
             ],
             'comments' => [
                 'total' => $totalComments,
