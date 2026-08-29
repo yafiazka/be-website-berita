@@ -20,6 +20,8 @@ use App\Http\Controllers\Api\V1\DashboardStatController;
 use App\Http\Controllers\Api\V1\ActivityLogController;
 use App\Http\Controllers\Api\V1\FeedController;
 use App\Http\Controllers\Api\V1\SettingController;
+use App\Http\Controllers\Api\EditorialArticleController;
+use App\Http\Controllers\Api\EditorialMediaController;
 
 Route::prefix('v1')->group(function () {
 
@@ -75,25 +77,21 @@ Route::prefix('v1')->group(function () {
     // ── Rute Editorial (Redaksi CMS Frontend) ──────────────────
     Route::prefix('editorial')->middleware(['auth:sanctum'])->group(function () {
         // CRUD Artikel Redaksi
-        Route::get('/articles', [ArticleController::class, 'dashboardIndex']);
-        Route::post('/articles', [ArticleController::class, 'store']);
-        Route::get('/articles/{id}', [ArticleController::class, 'dashboardShow']);
-        Route::put('/articles/{id}', [ArticleController::class, 'update']);
-        Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
+        Route::get('/articles', [EditorialArticleController::class, 'index']);
+        Route::post('/articles', [EditorialArticleController::class, 'store']);
+        Route::get('/articles/{id}', [EditorialArticleController::class, 'show']);
+        Route::put('/articles/{id}', [EditorialArticleController::class, 'update']);
+        Route::delete('/articles/{id}', [EditorialArticleController::class, 'destroy']);
 
         // Aksi Cepat
-        Route::post('/articles/{id}/publish', [ArticleController::class, 'publish']);
-        Route::post('/articles/{id}/submit-review', [ArticleController::class, 'submitReview']);
-        Route::post('/articles/{id}/archive', [ArticleController::class, 'archive']);
-        Route::post('/articles/{id}/schedule', [ArticleController::class, 'schedule']);
+        Route::post('/articles/{id}/publish', [EditorialArticleController::class, 'publish']);
 
         // Upload Media / Gambar langsung dari Editor
-        Route::post('/media/upload', [MediaController::class, 'upload']);
+        Route::post('/media/upload', [EditorialMediaController::class, 'upload']);
 
         // Statistik Redaksi
-        Route::get('/stats', [DashboardStatController::class, 'overview']);
-        Route::get('/stats/overview', [DashboardStatController::class, 'overview']);
-        Route::get('/stats/top-articles', [DashboardStatController::class, 'topArticles']);
+        Route::get('/stats', [EditorialArticleController::class, 'stats']);
+        Route::get('/stats/overview', [EditorialArticleController::class, 'stats']);
     });
 
     // ── Dashboard / Redaksi & Admin ───────────────────────────
