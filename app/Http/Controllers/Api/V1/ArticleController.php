@@ -195,6 +195,14 @@ class ArticleController extends Controller
         $data['author_id'] = $request->user()->id;
         $data['status'] = $data['status'] ?? 'draft';
 
+        if (empty($data['author_source'])) {
+            $data['author_source'] = $request->user()->name;
+        }
+
+        if (empty($data['excerpt']) && !empty($data['content'])) {
+            $data['excerpt'] = \Illuminate\Support\Str::limit(strip_tags($data['content']), 160);
+        }
+
         // Handle uploaded image file or URL string
         if ($request->hasFile('thumbnail_file')) {
             $data['thumbnail'] = $request->file('thumbnail_file')->store('articles', 'public');
@@ -202,9 +210,11 @@ class ArticleController extends Controller
             $data['thumbnail'] = $request->file('thumbnail')->store('articles', 'public');
         } elseif ($request->hasFile('image')) {
             $data['thumbnail'] = $request->file('image')->store('articles', 'public');
+        } elseif (empty($data['thumbnail']) && !empty($data['thumbnail_url'])) {
+            $data['thumbnail'] = $data['thumbnail_url'];
         }
 
-        unset($data['thumbnail_file'], $data['image']);
+        unset($data['thumbnail_file'], $data['image'], $data['thumbnail_url']);
 
         $tags = $data['tags'] ?? [];
         unset($data['tags']);
@@ -239,9 +249,11 @@ class ArticleController extends Controller
             $data['thumbnail'] = $request->file('thumbnail')->store('articles', 'public');
         } elseif ($request->hasFile('image')) {
             $data['thumbnail'] = $request->file('image')->store('articles', 'public');
+        } elseif (isset($data['thumbnail_url']) && empty($data['thumbnail'])) {
+            $data['thumbnail'] = $data['thumbnail_url'];
         }
 
-        unset($data['thumbnail_file'], $data['image']);
+        unset($data['thumbnail_file'], $data['image'], $data['thumbnail_url']);
 
         $tags = $data['tags'] ?? null;
         unset($data['tags']);

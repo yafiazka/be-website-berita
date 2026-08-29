@@ -31,13 +31,17 @@ class Article extends Model implements HasMedia
     protected $fillable = [
         'category_id',
         'author_id',
+        'author_source',
+        'source',
         'title',
         'slug',
         'excerpt',
         'content',
         'thumbnail',
         'thumbnail_file',
+        'video_url',
         'status',
+        'is_featured',
         'is_breaking',
         'published_at',
         'meta_title',
@@ -51,10 +55,19 @@ class Article extends Model implements HasMedia
     ];
 
     protected $casts = [
+        'is_featured' => 'boolean',
         'is_breaking' => 'boolean',
         'published_at' => 'datetime',
         'views_count' => 'integer',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['title', 'status', 'is_featured', 'is_breaking', 'published_at', 'category_id', 'author_source', 'source'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function getThumbnailUrlAttribute(): ?string
     {
@@ -85,14 +98,6 @@ class Article extends Model implements HasMedia
             $path = $value->store('articles', 'public');
             $this->attributes['thumbnail'] = $path;
         }
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['title', 'status', 'is_breaking', 'published_at', 'category_id'])
-            ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
     }
 
     public function category(): BelongsTo
@@ -140,6 +145,11 @@ class Article extends Model implements HasMedia
     public function scopeBreaking($query)
     {
         return $query->published()->where('is_breaking', true);
+    }
+
+    public function scopeFeatured($query)
+    {
+        return $query->published()->where('is_featured', true);
     }
 
     public function scopeTrending($query)

@@ -38,9 +38,10 @@ class ArticleCrudController extends CrudController
 
         CRUD::column('title')->label('Judul Artikel');
         CRUD::column('category_id')->type('select')->entity('category')->attribute('name')->label('Kategori');
-        CRUD::column('author_id')->type('select')->entity('author')->attribute('name')->label('Penulis');
+        CRUD::column('author_source')->label('Jurnalis / Penulis');
         CRUD::column('status')->type('enum')->label('Status');
-        CRUD::column('is_breaking')->type('boolean')->label('Breaking News');
+        CRUD::column('is_featured')->type('boolean')->label('Featured');
+        CRUD::column('is_breaking')->type('boolean')->label('Breaking');
         CRUD::column('views_count')->label('Views');
         CRUD::column('published_at')->label('Publikasi');
     }
@@ -58,7 +59,9 @@ class ArticleCrudController extends CrudController
         CRUD::field('title')->label('Judul Artikel');
         CRUD::field('slug')->label('Slug (opsional / otomatis terbuat)');
         CRUD::field('category_id')->type('select')->entity('category')->attribute('name')->label('Kategori');
-        CRUD::field('author_id')->type('select')->entity('author')->attribute('name')->default(backpack_user()?->id)->label('Penulis');
+        CRUD::field('author_id')->type('select')->entity('author')->attribute('name')->default(backpack_user()?->id)->label('Akun Pengunggah (User ID)');
+        CRUD::field('author_source')->type('text')->label('Nama Jurnalis / Penulis (Opsional)')->hint('Contoh: Budi Santoso (Koresponden IKN)');
+        CRUD::field('source')->type('text')->label('Sumber Berita (Opsional)')->hint('Contoh: LKBN Antara, Reuters, Siaran Pers Kementerian');
         
         // Pilihan 1: Upload File Gambar
         CRUD::field('thumbnail_file')
@@ -72,6 +75,7 @@ class ArticleCrudController extends CrudController
             ->label('Atau Masukkan URL Gambar (Opsional)')
             ->hint('Contoh: https://images.unsplash.com/... (Gunakan jika tidak mengunggah file langsung)');
 
+        CRUD::field('video_url')->type('text')->label('URL Video Liputan (YouTube / Video Embed)')->hint('Contoh: https://www.youtube.com/watch?v=...');
         CRUD::field('excerpt')->type('textarea')->label('Ringkasan / Excerpt');
         CRUD::field('content')->type('textarea')->label('Konten Berita');
         CRUD::field('tags')->type('select_multiple')->entity('tags')->attribute('name')->pivot(true)->label('Tags');
@@ -81,6 +85,7 @@ class ArticleCrudController extends CrudController
             'published' => 'Dipublikasikan',
             'archived' => 'Diarsipkan',
         ])->default('draft')->label('Status');
+        CRUD::field('is_featured')->type('checkbox')->label('Tandai sebagai Berita Pilihan (Featured)');
         CRUD::field('is_breaking')->type('checkbox')->label('Tandai sebagai Breaking News');
         CRUD::field('published_at')->type('datetime')->label('Waktu Publikasi');
         CRUD::field('meta_title')->label('SEO Meta Title');

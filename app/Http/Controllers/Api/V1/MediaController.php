@@ -14,18 +14,24 @@ class MediaController extends Controller
     public function upload(Request $request): JsonResponse
     {
         $request->validate([
-            'file' => 'required|image|mimes:jpeg,png,jpg,webp,gif|max:5120', // 5MB max
+            'file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,avif,svg|max:5120',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,avif,svg|max:5120',
         ]);
 
-        $file = $request->file('file');
+        $file = $request->file('image') ?? $request->file('file');
+        if (!$file) {
+            return ApiResponse::error('Berkas gambar wajib diunggah.', 422);
+        }
+
         $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('uploads/media', $filename, 'public');
+        $path = $file->storeAs('articles', $filename, 'public');
 
         $url = asset('storage/' . $path);
 
         return ApiResponse::success([
             'file_name' => $file->getClientOriginalName(),
             'file_path' => $path,
+            'path' => $path,
             'url' => $url,
             'mime_type' => $file->getClientMimeType(),
             'size' => $file->getSize(),

@@ -28,6 +28,16 @@ class DashboardStatController extends Controller
         $totalSubscribers = NewsletterSubscriber::whereNull('unsubscribed_at')->count();
 
         return ApiResponse::success([
+            'total_articles' => $totalArticles,
+            'published_articles' => $publishedArticles,
+            'draft_articles' => $draftArticles,
+            'review_articles' => $reviewArticles,
+            'total_views' => (int) $totalViews,
+            'total_comments' => $totalComments,
+            'pending_comments' => $pendingComments,
+            'total_users' => $totalUsers,
+            'total_categories' => $totalCategories,
+            'total_subscribers' => $totalSubscribers,
             'articles' => [
                 'total' => $totalArticles,
                 'published' => $publishedArticles,

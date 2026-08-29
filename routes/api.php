@@ -72,6 +72,30 @@ Route::prefix('v1')->group(function () {
         Route::get('/me/bookmarks', [BookmarkController::class, 'myBookmarks']);
     });
 
+    // ── Rute Editorial (Redaksi CMS Frontend) ──────────────────
+    Route::prefix('editorial')->middleware(['auth:sanctum'])->group(function () {
+        // CRUD Artikel Redaksi
+        Route::get('/articles', [ArticleController::class, 'dashboardIndex']);
+        Route::post('/articles', [ArticleController::class, 'store']);
+        Route::get('/articles/{id}', [ArticleController::class, 'dashboardShow']);
+        Route::put('/articles/{id}', [ArticleController::class, 'update']);
+        Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
+
+        // Aksi Cepat
+        Route::post('/articles/{id}/publish', [ArticleController::class, 'publish']);
+        Route::post('/articles/{id}/submit-review', [ArticleController::class, 'submitReview']);
+        Route::post('/articles/{id}/archive', [ArticleController::class, 'archive']);
+        Route::post('/articles/{id}/schedule', [ArticleController::class, 'schedule']);
+
+        // Upload Media / Gambar langsung dari Editor
+        Route::post('/media/upload', [MediaController::class, 'upload']);
+
+        // Statistik Redaksi
+        Route::get('/stats', [DashboardStatController::class, 'overview']);
+        Route::get('/stats/overview', [DashboardStatController::class, 'overview']);
+        Route::get('/stats/top-articles', [DashboardStatController::class, 'topArticles']);
+    });
+
     // ── Dashboard / Redaksi & Admin ───────────────────────────
     Route::prefix('dashboard')->middleware(['auth:sanctum'])->group(function () {
         
