@@ -124,8 +124,8 @@ class EditorialArticleController extends Controller
             $authorUser = $user ?? $request->user() ?? \App\Models\User::where('username', 'admin')->first() ?? \App\Models\User::first();
             $isSuperAdmin = $authorUser ? $authorUser->hasAnyRole(['Super Administrator', 'Admin', 'super-admin']) : true;
             $authorSource = $isSuperAdmin
-                ? ($validated['author_source'] ?? 'Berita Satu Nusa')
-                : ($validated['author_source'] ?? ($authorUser ? $authorUser->name : 'Redaksi'));
+                ? ($validated['author_source'] ?? 'Redaksi JERITAN')
+                : ($validated['author_source'] ?? ($authorUser ? $authorUser->name : 'Redaksi JERITAN'));
 
             $isFeatured = filter_var($validated['is_featured'] ?? false, FILTER_VALIDATE_BOOLEAN);
             $isBreaking = filter_var($validated['is_breaking'] ?? false, FILTER_VALIDATE_BOOLEAN);

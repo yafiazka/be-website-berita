@@ -3,14 +3,15 @@
     "message": "Pengaturan website berhasil dimuat.",
     "data": {
         "site": {
-            "name": "Berita Satu Nusa",
-            "tagline": "Portal Berita Terkini & Terpercaya Nusantara",
-            "description": "Menyajikan berita terkini, aktual, tajam, dan terpercaya seputar peristiwa nasional, internasional, teknologi, bisnis, gaya hidup, dan hiburan di seluruh penjuru nusantara.",
-            "keywords": "berita satu nusa, portal berita indonesia, kabar nusantara, berita terkini, nasional, internasional, teknologi, bisnis",
+            "name": "JERITAN",
+            "tagline": "Jurnal Edukasi, Reformasi, Investigasi, Transparansi dan Aspirasi Nusantara",
+            "description": "JERITAN (Jurnal Edukasi, Reformasi, Investigasi, Transparansi dan Aspirasi Nusantara) adalah media siber independen yang menyajikan jurnalisme investigatif, edukatif, transparan, dan terpercaya di seluruh penjuru nusantara.",
+            "keywords": "jeritan, jeritan.asia, jurnal edukasi reformasi investigasi transparansi dan aspirasi nusantara, portal berita indonesia, berita investigasi, berita terkini nusantara",
+            "domain": "jeritan.asia",
             "logo_url": "/template/images/logo.svg",
             "logo_footer_url": "/template/images/white_logo.svg",
             "favicon_url": "/favicon.ico",
-            "author": "Redaksi Berita Satu Nusa",
+            "author": "Redaksi JERITAN",
             "language": "id",
             "timezone": "Asia/Jakarta"
         },
@@ -167,8 +168,8 @@
             ]
         },
         "footer": {
-            "about_text": "Berita Satu Nusa adalah media siber independen yang berkomitmen menyajikan jurnalisme berkualitas, berimbang, dan berpegang teguh pada kode etik jurnalistik demi mencerdaskan bangsa.",
-            "copyright_text": "© 2026 Berita Satu Nusa. Seluruh hak cipta dilindungi undang-undang."
+            "about_text": "JERITAN (Jurnal Edukasi, Reformasi, Investigasi, Transparansi dan Aspirasi Nusantara) adalah media siber independen yang berkomitmen menyajikan jurnalisme investigatif yang berkualitas, berimbang, transparan, dan berpegang teguh pada kode etik jurnalistik demi mencerdaskan bangsa.",
+            "copyright_text": "© 2026 JERITAN (jeritan.asia). Seluruh hak cipta dilindungi undang-undang."
         },
         "ads": {
             "header_banner": {

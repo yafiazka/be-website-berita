@@ -46,14 +46,14 @@ class SettingFeController extends Controller
         $currentSettings = $this->loadSettings();
 
         // 1. Site Identitas
-        $currentSettings['site']['name'] = $request->input('site.name', $currentSettings['site']['name'] ?? 'Berita Satu Nusa');
-        $currentSettings['site']['tagline'] = $request->input('site.tagline', $currentSettings['site']['tagline'] ?? '');
+        $currentSettings['site']['name'] = $request->input('site.name', $currentSettings['site']['name'] ?? 'JERITAN');
+        $currentSettings['site']['tagline'] = $request->input('site.tagline', $currentSettings['site']['tagline'] ?? 'Jurnal Edukasi, Reformasi, Investigasi, Transparansi dan Aspirasi Nusantara');
         $currentSettings['site']['description'] = $request->input('site.description', $currentSettings['site']['description'] ?? '');
         $currentSettings['site']['keywords'] = $request->input('site.keywords', $currentSettings['site']['keywords'] ?? '');
         $currentSettings['site']['logo_url'] = $request->input('site.logo_url', $currentSettings['site']['logo_url'] ?? '/template/images/logo.svg');
         $currentSettings['site']['logo_footer_url'] = $request->input('site.logo_footer_url', $currentSettings['site']['logo_footer_url'] ?? '/template/images/white_logo.svg');
         $currentSettings['site']['favicon_url'] = $request->input('site.favicon_url', $currentSettings['site']['favicon_url'] ?? '/favicon.ico');
-        $currentSettings['site']['author'] = $request->input('site.author', $currentSettings['site']['author'] ?? 'Redaksi Berita Satu Nusa');
+        $currentSettings['site']['author'] = $request->input('site.author', $currentSettings['site']['author'] ?? 'Redaksi JERITAN');
         $currentSettings['site']['language'] = $request->input('site.language', 'id');
         $currentSettings['site']['timezone'] = $request->input('site.timezone', 'Asia/Jakarta');
 
